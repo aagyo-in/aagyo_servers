@@ -1,0 +1,27 @@
+===================> 22 April 2024
+
+1. All data in get merchant,s profile.
+
+2.Home APIs
+-Dekivered Orders Section
+-Rejected Orders
+-Top Dished in your menu
+
+3-Get all products list(pagination,filter,searching,filterDateWise,filterNameWise,filterCategoryWise) =========PENDING
+4- Delete category by id
+
+5-Add Product
+-Category in Ids
+-product list (with pagination and filter)
+
+6-Attribute
+-Create(string)
+-Delete
+-getAll
+
+
+======================================================================
+==>USER PROFILE SECTION
+==>CReate Offer and also offers from CRM
+==>OFFER TRACKING
+==>
