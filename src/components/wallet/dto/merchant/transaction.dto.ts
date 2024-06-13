@@ -1,20 +1,17 @@
 import { ApiProperty } from "@nestjs/swagger";
 import { IsEnum } from "class-validator";
 
-enum FILTERS {
-  ORDERS = "ORDERS",
-  MONEYDEPOSITE = "MONEYDEPOSITE",
-  WITHDRAW = "WITHDRAW",
-  SETTLEMENT = "SETTLEMENT",
+export enum TRANSACTIONFILTER {
+  ALL = "ALL",
+  DELIVERED = "DELIVERED",
+  CANCEL = "CANCEL",
+  REJECTED = "REJECTED",
 }
 
 export class TransactionDTO {
-  @ApiProperty({ required: false, type: String })
-  search?: string;
-
-  @ApiProperty({ enum: FILTERS, enumName: "Filter Type" })
-  @IsEnum(FILTERS)
-  filter?: FILTERS = FILTERS.ORDERS;
+  @ApiProperty({ enum: TRANSACTIONFILTER, enumName: "Filter Type" })
+  @IsEnum(TRANSACTIONFILTER)
+  filter?: TRANSACTIONFILTER = TRANSACTIONFILTER.ALL;
 
   @ApiProperty({ required: false, type: String })
   page?: string;
