@@ -52,7 +52,7 @@ export class OrdersController {
   @Get("/currentOrders")
   @ApiOperation({ summary: "Get Current Orders by user" })
   @HttpCode(HttpStatus.OK)
-  getCurrentOrders(@Req() { sub }: any) {
+  getCurrentOrders(@Req() { user: { sub } }: any) {
     return this.ordersService.getCurrentOrders(sub);
   }
 
