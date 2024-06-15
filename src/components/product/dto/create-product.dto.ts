@@ -2,7 +2,6 @@ import { ApiProperty } from "@nestjs/swagger";
 import { Transform } from "class-transformer";
 import {
   IsArray,
-  IsBoolean,
   IsNotEmpty,
   IsNumber,
   IsOptional,
@@ -89,5 +88,5 @@ export class CreateProductDTO {
   discount: number;
 
   @ApiProperty({ type: "string", format: "binary" })
-  productImage: File;
+  productImage: any;
 }
