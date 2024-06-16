@@ -296,11 +296,21 @@ export class MerchantService extends CrudService {
         merchant_id: new ObjectId(id),
         documents: [...documentsData],
       });
-      console.log(result);
-
+      const { name, email } = await this.merchantModel.findById(
+        new ObjectId(id)
+      );
+      const payload = {
+        sub: id,
+        userName: name,
+        userEmail: email,
+      };
+      const access_token = await this.jwtService.signAsync(payload);
       return {
         status: "SUCCESS",
         message: "Document Saved Successfully!",
+        data: {
+          access_token,
+        },
       };
     } catch (err) {
       throw err;
