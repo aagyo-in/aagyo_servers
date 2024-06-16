@@ -1,0 +1,10 @@
+export enum ORDER_STATUS {
+  DUE = 0,
+  PROCESSING = 1,
+  READYTOPICK = 2,
+  ONTHEWAY = 3,
+  DELIVERED = 4,
+  REJECTED = 5,
+  CANCEL = 6,
+  DENY = 7,
+}

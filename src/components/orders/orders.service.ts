@@ -121,8 +121,25 @@ export class OrdersService extends CrudService {
           dateAndTime: new Date(),
           user: "Suraj Yadav",
           totalOrderOfUser: 10,
-          products: [],
-          totalAmount: 3000,
+          products: [
+            {
+              productName: "Dosa",
+              isOrganic: true,
+              productImage:
+                "https://aagyo-v1.s3.ap-south-1.amazonaws.com/productImage1717937017004",
+              price: 150.0,
+              quantity: 2,
+            },
+            {
+              productName: "Burger",
+              isOrganic: true,
+              productImage:
+                "https://aagyo-v1.s3.ap-south-1.amazonaws.com/productImage1717937017004",
+              price: 10.0,
+              quantity: 3,
+            },
+          ],
+          totalAmount: 400,
           instruction: "More Spicy!",
           paymentStatus: "COD",
           orderStatus: "DUE",
@@ -143,6 +160,7 @@ export class OrdersService extends CrudService {
     id: ObjectId,
     updateOrderStatusDTO: UpdateOrderStatusDTO
   ): Promise<any> {
+    const { orderStatus } = updateOrderStatusDTO;
     try {
       const data = [
         {
@@ -150,18 +168,34 @@ export class OrdersService extends CrudService {
           dateAndTime: new Date(),
           user: "Suraj Yadav",
           totalOrderOfUser: 10,
-          products: [],
-          totalAmount: 3000,
-          instruction: "More Spicy!",
+          products: [
+            {
+              productName: "Dosa",
+              isOrganic: true,
+              productImage:
+                "https://aagyo-v1.s3.ap-south-1.amazonaws.com/productImage1717937017004",
+              price: 150.0,
+              quantity: 2,
+            },
+            {
+              productName: "Burger",
+              isOrganic: false,
+              productImage:
+                "https://aagyo-v1.s3.ap-south-1.amazonaws.com/productImage1717937017004",
+              price: 10.0,
+              quantity: 3,
+            },
+          ],
+          totalAmount: 400,
+          instruction: "More Delicious!",
           paymentStatus: "COD",
-          orderStatus: "DUE",
-          orderStatusCode: 0,
+          orderStatus: orderStatus,
         },
       ];
       return {
         message: "Status Update Successfully!",
         status: "SUCCESS",
-        // data: data,
+        data: data,
       };
     } catch (error) {
       throw new ExceptionsHandler(error);

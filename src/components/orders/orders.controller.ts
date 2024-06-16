@@ -18,6 +18,7 @@ import { OrderHistoryDTO } from "./dto/order-history.dto";
 import { Public } from "src/decorators/public.decorator";
 
 @UseGuards(AuthGuard)
+@ApiBearerAuth()
 @ApiTags("Orders")
 @Controller("orders")
 export class OrdersController {
@@ -53,6 +54,7 @@ export class OrdersController {
   @ApiOperation({ summary: "Get Current Orders by user" })
   @HttpCode(HttpStatus.OK)
   getCurrentOrders(@Req() { user: { sub } }: any) {
+    console.log("hit");
     return this.ordersService.getCurrentOrders(sub);
   }
 
@@ -61,7 +63,7 @@ export class OrdersController {
   @ApiBody({ type: UpdateOrderStatusDTO })
   @HttpCode(HttpStatus.OK)
   updateStatus(
-    @Req() { sub }: any,
+    @Req() { user: { sub } }: any,
     @Body() updateOrderStatusDTO: UpdateOrderStatusDTO
   ) {
     return this.ordersService.updateStatus(sub, updateOrderStatusDTO);
