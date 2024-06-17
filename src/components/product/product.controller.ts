@@ -13,13 +13,20 @@ import {
   UseInterceptors,
 } from "@nestjs/common";
 import { ProductService } from "./product.service";
-import { ApiBody, ApiConsumes, ApiOperation, ApiTags } from "@nestjs/swagger";
+import {
+  ApiBearerAuth,
+  ApiBody,
+  ApiConsumes,
+  ApiOperation,
+  ApiTags,
+} from "@nestjs/swagger";
 import { CreateProductDTO } from "./dto/create-product.dto";
 import { FileInterceptor } from "@nestjs/platform-express";
 import { GetProductDTO } from "./dto/get-product.dto";
 import { AuthGuard } from "src/guards/auth.guards";
 
 @UseGuards(AuthGuard)
+@ApiBearerAuth()
 @ApiTags("Products")
 @Controller("product")
 export class ProductController {
@@ -35,18 +42,20 @@ export class ProductController {
   @HttpCode(HttpStatus.CREATED)
   @UseInterceptors(FileInterceptor("productImage"))
   addProduct(
-    @Req() { sub }: any,
+    @Req() { user: { sub } }: any,
     @Body() createProductDTO: CreateProductDTO,
     @UploadedFile()
     productImage: Express.Multer.File
   ) {
-    if (!productImage) {
-      throw new HttpException(
-        "Product image is required",
-        HttpStatus.BAD_REQUEST
-      );
-    }
-    return this.productService.addProduct(sub, createProductDTO, productImage);
+    // if (!productImage) {
+    //   throw new HttpException(
+    //     "Product image is required",
+    //     HttpStatus.BAD_REQUEST
+    //   );
+    // }
+    console.log("productImage", productImage);
+    console.log("createProduct", createProductDTO);
+    // return this.productService.addProduct(sub, createProductDTO, productImage);
   }
 
   @ApiOperation({ summary: "Get All Products" })

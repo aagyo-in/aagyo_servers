@@ -1,54 +1,62 @@
 import { ApiProperty } from "@nestjs/swagger";
-import { Transform } from "class-transformer";
+import { Transform, Type } from "class-transformer";
 import {
   IsArray,
+  IsBoolean,
+  IsDefined,
   IsNotEmpty,
   IsNumber,
   IsOptional,
   IsString,
+  ValidateNested,
 } from "class-validator";
 import { ObjectId } from "mongodb";
 
-export class CreateProductDTO {
+enum DISCOUNT_TYPE {
+  PERCENT = "PERCENT",
+  AMOUNT = "AMOUNT",
+}
+export class VARIENTS {
   @ApiProperty()
-  @IsNotEmpty()
+  @IsOptional()
   @IsString()
-  categoryId: ObjectId;
+  discountType: DISCOUNT_TYPE = DISCOUNT_TYPE.AMOUNT;
 
   @ApiProperty()
   @IsOptional()
-  @IsString()
-  unitId: ObjectId;
-
-  @ApiProperty()
-  @IsNotEmpty()
-  @IsString()
-  productName: string;
-
-  @ApiProperty()
-  @IsNotEmpty()
-  @IsString()
-  description: string;
+  @IsNumber()
+  @Transform(({ value }) => {
+    const numberValue = Number(value);
+    return isNaN(numberValue) ? value : numberValue;
+  })
+  discount: number;
 
   @ApiProperty()
   @IsOptional()
-  @IsArray()
-  tags: String[];
-
-  @ApiProperty()
-  @IsArray()
-  @IsOptional()
-  keywords: string[];
-
-  @ApiProperty()
-  @IsOptional()
-  @IsArray()
-  attributes: any[];
+  @IsNumber()
+  @Transform(({ value }) => {
+    const numberValue = Number(value);
+    return isNaN(numberValue) ? value : numberValue;
+  })
+  mrp: number;
 
   @ApiProperty()
   @IsOptional()
-  @IsArray()
-  varients: any[];
+  @IsNumber()
+  @Transform(({ value }) => {
+    const numberValue = Number(value);
+    return isNaN(numberValue) ? value : numberValue;
+  })
+  price: number;
+
+  @ApiProperty()
+  @IsOptional()
+  @IsNumber()
+  @Transform(({ value }) => {
+    const numberValue = Number(value);
+    return isNaN(numberValue) ? value : numberValue;
+  })
+  weightOrCount: number;
 
   @ApiProperty()
   @IsOptional()
@@ -66,27 +74,52 @@ export class CreateProductDTO {
     const numberValue = Number(value);
     return isNaN(numberValue) ? value : numberValue;
   })
-  maxPurchaseQuantity: number;
+  purchaseQuantity: number;
 
   @ApiProperty()
   @IsOptional()
   @IsString()
-  isOrganic: string;
-
-  @ApiProperty()
-  @IsOptional()
-  @IsString()
-  discountType: string;
-
-  @ApiProperty()
-  @IsOptional()
-  @IsNumber()
-  @Transform(({ value }) => {
-    const numberValue = Number(value);
-    return isNaN(numberValue) ? value : numberValue;
-  })
-  discount: number;
+  short: string;
 
   @ApiProperty({ type: "string", format: "binary" })
-  productImage: any;
+  productImage: File;
+}
+
+export class CreateProductDTO {
+  @ApiProperty({ type: [String], description: "Array of category IDs" })
+  @IsNotEmpty()
+  categoryId: [ObjectId];
+
+  @ApiProperty()
+  @IsNotEmpty()
+  @IsString()
+  productName: string;
+
+  @ApiProperty()
+  @IsNotEmpty()
+  @IsString()
+  description: string;
+
+  @ApiProperty({ type: [String], description: "Array of Tags " })
+  @IsOptional()
+  tags: [String];
+
+  @ApiProperty({ type: [String], description: "Array of Keywords " })
+  @IsOptional()
+  keywords: [string];
+
+  @ApiProperty()
+  @IsOptional()
+  @IsBoolean()
+  @Transform(({ value }) => {
+    const boolValue = Boolean(value);
+    return boolValue;
+  })
+  isOrganic: boolean;
+
+  @ApiProperty({ type: [VARIENTS] })
+  @IsOptional()
+  // @ValidateNested({ each: true })
+  // @Type(() => VARIENTS)
+  varients: VARIENTS[];
 }

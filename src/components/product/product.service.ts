@@ -19,45 +19,45 @@ export class ProductService extends CrudService {
   }
 
   async addProduct(
-    sub: ObjectId,
+    id: ObjectId,
     createProductDTO: CreateProductDTO,
     productImage: Express.Multer.File
   ): Promise<any> {
     try {
-      const {
-        categoryId,
-        description,
-        keywords,
-        productName,
-        tags,
-        unitId,
-        varients,
-        attributes,
-        isOrganic,
-        totalStock,
-        maxPurchaseQuantity,
-        discount,
-        discountType,
-      } = createProductDTO;
-      const uploadFile =
-        productImage && (await this.s3Service.uploadFile(productImage));
-      await this.productModel.create({
-        productOwner: new ObjectId(sub),
-        productName,
-        categoryId: new ObjectId(categoryId),
-        unitId: new ObjectId(unitId),
-        description,
-        keywords,
-        tags,
-        varients,
-        attributes,
-        productImage: uploadFile,
-        isOrganic,
-        totalStock,
-        maxPurchaseQuantity,
-        discount,
-        discountType,
-      });
+      // const {
+      //   categoryId,
+      //   description,
+      //   keywords,
+      //   productName,
+      //   tags,
+      //   unitId,
+      //   varients,
+      //   attributes,
+      //   isOrganic,
+      //   totalStock,
+      //   maxPurchaseQuantity,
+      //   discount,
+      //   discountType,
+      // } = createProductDTO;
+      // const uploadFile =
+      //   productImage && (await this.s3Service.uploadFile(productImage));
+      // await this.productModel.create({
+      //   productOwner: new ObjectId(id),
+      //   productName,
+      //   categoryId: new ObjectId(categoryId),
+      //   unitId: new ObjectId(unitId),
+      //   description,
+      //   keywords,
+      //   tags,
+      //   varients,
+      //   attributes,
+      //   productImage: uploadFile,
+      //   isOrganic,
+      //   totalStock,
+      //   maxPurchaseQuantity,
+      //   discount,
+      //   discountType,
+      // });
       return {
         message: "Add Product Sucessfully!",
         status: "SUCCESS",
