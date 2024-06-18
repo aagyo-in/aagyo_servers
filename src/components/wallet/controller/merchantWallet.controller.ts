@@ -76,4 +76,12 @@ export class MerchantWallletController {
   requestForWithdrwals(@Req() { user: { sub } }: any): any {
     return this.merchantWalletService.requestForWithdrwals(sub);
   }
+
+  @ApiBearerAuth()
+  @Get("analyticsChart")
+  @ApiOperation({ summary: "Get 7 days report for chart" })
+  @HttpCode(HttpStatus.OK)
+  chartOfWallet(@Req() { user: { sub } }: any): any {
+    return this.merchantWalletService.chartOfWallet(sub);
+  }
 }

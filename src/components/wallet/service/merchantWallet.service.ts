@@ -226,4 +226,27 @@ export class MerchantWalletService {
       data: data,
     };
   }
+
+  async chartOfWallet(id: ObjectId): Promise<any> {
+    const data = {
+      totalAmount: 30000,
+      reportOfSevenDays: {
+        1: 30000.0,
+        2: 30000.0,
+        3: 60000.0,
+        4: 70000.0,
+        5: 10000.0,
+        6: 5000.0,
+        7: 30000.0,
+      },
+      dailyAvgAmount: 3568.0,
+      dailyAvgOrders: 36.0,
+      ticketSize: 134.0,
+    };
+    return {
+      message: "Report for Charts",
+      status: "SUCCESS",
+      data: data,
+    };
+  }
 }
