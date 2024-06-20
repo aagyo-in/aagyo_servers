@@ -6,6 +6,7 @@ import {
   IsDefined,
   IsNotEmpty,
   IsNumber,
+  IsObject,
   IsOptional,
   IsString,
   ValidateNested,
@@ -81,8 +82,9 @@ export class VARIENTS {
   @IsString()
   short: string;
 
-  @ApiProperty({ type: "string", format: "binary" })
-  productImage: File;
+  @ApiProperty()
+  @IsObject()
+  productImage: Object;
 }
 
 export class CreateProductDTO {
@@ -119,7 +121,7 @@ export class CreateProductDTO {
 
   @ApiProperty({ type: [VARIENTS] })
   @IsOptional()
-  // @ValidateNested({ each: true })
-  // @Type(() => VARIENTS)
+  @ValidateNested({ each: true })
+  @Type(() => VARIENTS)
   varients: VARIENTS[];
 }

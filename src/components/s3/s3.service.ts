@@ -100,8 +100,7 @@ export class S3Service {
       try {
         const command = new DeleteObjectCommand(input);
         const result = await this.s3.send(command);
-        console.log(result);
-        return `Deleted image ${key} from S3 bucket`;
+        return `Deleted file ${key} from S3 bucket`;
       } catch (err) {
         this.logger.error(`Cannot delete file inside s3`, err);
         throw err;

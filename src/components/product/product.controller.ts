@@ -33,29 +33,17 @@ export class ProductController {
   constructor(private readonly productService: ProductService) {}
 
   @ApiOperation({ summary: "Add Product" })
-  @ApiConsumes("multipart/form-data")
   @ApiBody({
     description: "Product Detail",
     type: CreateProductDTO,
   })
   @Post("add")
   @HttpCode(HttpStatus.CREATED)
-  @UseInterceptors(FileInterceptor("productImage"))
   addProduct(
     @Req() { user: { sub } }: any,
-    @Body() createProductDTO: CreateProductDTO,
-    @UploadedFile()
-    productImage: Express.Multer.File
+    @Body() createProductDTO: CreateProductDTO
   ) {
-    // if (!productImage) {
-    //   throw new HttpException(
-    //     "Product image is required",
-    //     HttpStatus.BAD_REQUEST
-    //   );
-    // }
-    console.log("productImage", productImage);
-    console.log("createProduct", createProductDTO);
-    // return this.productService.addProduct(sub, createProductDTO, productImage);
+    return this.productService.addProduct(sub, createProductDTO);
   }
 
   @ApiOperation({ summary: "Get All Products" })
