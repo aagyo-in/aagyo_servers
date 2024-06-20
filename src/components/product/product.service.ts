@@ -32,7 +32,6 @@ export class ProductService extends CrudService {
         isOrganic,
         varients,
       } = createProductDTO;
-      console.log(createProductDTO);
       await this.productModel.create({
         productOwner: new ObjectId(id),
         productName,
