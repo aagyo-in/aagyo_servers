@@ -17,6 +17,16 @@ enum DISCOUNT_TYPE {
   PERCENT = "PERCENT",
   AMOUNT = "AMOUNT",
 }
+class FILES {
+  @ApiProperty()
+  @IsOptional()
+  @IsString()
+  fileName: string;
+  @ApiProperty()
+  @IsOptional()
+  @IsString()
+  filePath: string;
+}
 export class VARIENTS {
   @ApiProperty()
   @IsOptional()
@@ -82,9 +92,11 @@ export class VARIENTS {
   @IsString()
   short: string;
 
-  @ApiProperty()
-  @IsObject()
-  productImage: Object;
+  @ApiProperty({ type: [FILES] })
+  @IsOptional()
+  @ValidateNested({ each: true })
+  @Type(() => FILES)
+  productImage: FILES[];
 }
 
 export class CreateProductDTO {

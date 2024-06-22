@@ -28,8 +28,8 @@ class Varients {
   @Prop()
   short: string;
 
-  @Prop({ type: Object, required: true })
-  productImage: Object;
+  @Prop({ type: Array, required: true })
+  productImage: [];
 }
 
 @Schema({ timestamps: true })
