@@ -1,14 +1,19 @@
-FROM node:18
+FROM node:18 AS backend-builder
 
-WORKDIR /aagyo
+WORKDIR /app
 
 COPY . .
 
 RUN npm install
 
-COPY . .
 
-EXPOSE 8080
+FROM node:18-slim
+
+WORKDIR /app
+
+COPY --from=backend-builder /app .
+
+EXPOSE 3000
 
 
 CMD [ "npm" ,"run","start"]
