@@ -9,6 +9,8 @@ import { S3Module } from "../s3/s3.module";
 import { JWT_CONFIG } from "src/config/jwt.config";
 import { ConfigModule, ConfigService } from "@nestjs/config";
 import { PassportModule } from "@nestjs/passport";
+import { UserController } from "./controller/user.controller";
+import { UserService } from "./service/user.service";
 
 @Module({
   imports: [
@@ -28,7 +30,7 @@ import { PassportModule } from "@nestjs/passport";
     }),
     S3Module,
   ],
-  controllers: [AdminController, MerchantController],
-  providers: [AdminService, MerchantService],
+  controllers: [AdminController, MerchantController, UserController],
+  providers: [AdminService, MerchantService, UserService],
 })
 export class AuthModule {}
