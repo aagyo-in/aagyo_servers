@@ -8,6 +8,7 @@ import {
   Patch,
   Post,
   Query,
+  Req,
   UploadedFile,
   UseGuards,
   UseInterceptors,
@@ -15,12 +16,21 @@ import {
 import { MerchantService } from "./merchant.service";
 import { CreateMerchantDTO } from "./dto/createMerchant.dto";
 import { MerchantSortFilterDTO } from "./dto/merchantSortFilterDTO";
-import { ApiBody, ApiOperation, ApiParam, ApiTags } from "@nestjs/swagger";
+import {
+  ApiBearerAuth,
+  ApiBody,
+  ApiOperation,
+  ApiParam,
+  ApiQuery,
+  ApiTags,
+} from "@nestjs/swagger";
 import { StoreStatus } from "./dto/store-Status.dto";
 import { AuthGuard } from "src/guards/auth.guards";
 import { Public } from "src/decorators/public.decorator";
 import { FileInterceptor } from "@nestjs/platform-express";
+import { GetStoresDTO } from "./dto/stores/get-Stores.dto";
 
+@ApiBearerAuth()
 @UseGuards(AuthGuard)
 @ApiTags("Merchant")
 @Controller("/merchant")
@@ -101,5 +111,18 @@ export class MerchantController {
   @HttpCode(HttpStatus.OK)
   getProfileDetail(@Param("merchantId") merchantId: any) {
     return this.merchantService.getProfileDetail(merchantId);
+  }
+
+  @Get("allStores")
+  @ApiQuery({ name: "page", type: String, required: true })
+  @ApiQuery({ name: "limit", type: String, required: true })
+  @ApiQuery({ name: "search", type: String, required: false })
+  @ApiOperation({ summary: "Get All stores" })
+  @HttpCode(HttpStatus.OK)
+  getAllStores(
+    @Query() getStoresDto: GetStoresDTO,
+    @Req() { user: { sub } }: any
+  ) {
+    return this.merchantService.getAllStores(sub, getStoresDto);
   }
 }

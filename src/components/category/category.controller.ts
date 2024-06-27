@@ -16,7 +16,13 @@ import {
 import { CategoryService } from "./category.service";
 import { CreateCategoryDTO } from "./dto/create-category.dto";
 import { FileInterceptor } from "@nestjs/platform-express";
-import { ApiBody, ApiOperation, ApiParam, ApiTags } from "@nestjs/swagger";
+import {
+  ApiBearerAuth,
+  ApiBody,
+  ApiOperation,
+  ApiParam,
+  ApiTags,
+} from "@nestjs/swagger";
 import { CategoryStatusDTO } from "./dto/update-status.dto";
 import { AuthGuard } from "src/guards/auth.guards";
 import { Public } from "src/decorators/public.decorator";
@@ -53,6 +59,7 @@ export class CategoryController {
     return this.categoryService.getAllCategory();
   }
 
+  @ApiBearerAuth()
   @UseGuards(AuthGuard)
   @ApiOperation({ summary: "Get All Category with status and banner" })
   @Get("getAllWithStatus")
@@ -81,4 +88,7 @@ export class CategoryController {
   deleteCategoryById(@Param() id: ObjectId) {
     return this.categoryService.deleteCategoryById(id);
   }
+
+  // @UseGuards(AuthGuard)
+  // @ApiOperation({summary:'Get Store by Category'})
 }

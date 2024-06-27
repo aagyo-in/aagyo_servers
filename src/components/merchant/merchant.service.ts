@@ -14,6 +14,8 @@ import { StoreStatus } from "./dto/store-Status.dto";
 import { STORE_MODEL, StoreDocument } from "src/Schema/store";
 import { ObjectId } from "mongodb";
 import { addDays, addHours, format, parse } from "date-fns";
+import { CustomHttpException } from "src/exception/custom-http.exception";
+import { GetStoresDTO } from "./dto/stores/get-Stores.dto";
 
 @Injectable()
 export class MerchantService extends CrudService {
@@ -30,11 +32,6 @@ export class MerchantService extends CrudService {
   ): Promise<any> {
     try {
       const { limit, page, search, zone, city } = merchantSortFilterDTO;
-      console.log(limit);
-      console.log(page);
-      console.log(search);
-      console.log(zone);
-      console.log(city);
       const aggregationPipeline: any = [
         {
           $lookup: {
@@ -308,6 +305,65 @@ export class MerchantService extends CrudService {
       };
     } catch (error) {
       throw new ExceptionsHandler(error);
+    }
+  }
+  async getAllStores(id: ObjectId, getStoresDTO: GetStoresDTO) {
+    const { limit, page, search } = getStoresDTO;
+    try {
+      const aggregatePipeline: any = [
+        {
+          $match: {
+            storeName: {
+              $regex: `${search || ""}`,
+              $options: "i",
+            },
+          },
+        },
+        {
+          $project: {
+            storeName: 1,
+            merchant_id: 1,
+            city: 1,
+            state: 1,
+            address: 1,
+            banner: 1,
+            isFullTimeOpen: 1,
+            slots: 1,
+          },
+        },
+        {
+          $sort: {
+            createdAt: -1,
+          },
+        },
+        {
+          $facet: {
+            metadata: [
+              { $count: "total" },
+              {
+                $addFields: {
+                  page: +page,
+                  maxPage: {
+                    $ceil: {
+                      $divide: ["$total", +limit],
+                    },
+                  },
+                },
+              },
+            ],
+            data: [{ $skip: (+page - 1) * +limit }, { $limit: +limit }],
+          },
+        },
+      ];
+
+      const result = await this.storeModel.aggregate(aggregatePipeline);
+      return {
+        ststus: true,
+        message: "All Stores List",
+        data: result[0],
+      };
+    } catch (error) {
+      new CustomHttpException(error.message);
     }
   }
 }
