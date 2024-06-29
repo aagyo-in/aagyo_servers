@@ -1,4 +1,5 @@
 import { Prop, Schema, SchemaFactory } from "@nestjs/mongoose";
+import { ObjectId } from "mongodb";
 import mongoose, { Document } from "mongoose";
 
 class Slot {
@@ -20,7 +21,7 @@ export class Store {
   storeName: string;
 
   @Prop({ required: false })
-  category: [string];
+  category: [ObjectId];
 
   @Prop({ required: false })
   country: string;

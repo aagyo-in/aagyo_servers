@@ -83,15 +83,8 @@ export class MerchantController {
   @HttpCode(HttpStatus.CREATED)
   registerStoreDetail(
     @Body() registerStoreDetailDTO: RegisterStoreDetailDTO,
-    @UploadedFile() // new ParseFilePipe({
-    //   // validators: [
-    storeImage //   //   new MaxFileSizeValidator({ maxSize: 100000000 }),
-    //   //   new FileTypeValidator({
-    //   //     fileType: /(image\/jpeg|image\/png|application\/pdf)/,
-    //   //   }),
-    //   // ],
-    // })
-    : Express.Multer.File
+    @UploadedFile()
+    storeImage: Express.Multer.File
   ) {
     return this.merchantService.registerStoreDetail(
       registerStoreDetailDTO,

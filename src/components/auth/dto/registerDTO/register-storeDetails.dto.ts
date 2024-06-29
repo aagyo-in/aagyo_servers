@@ -1,8 +1,5 @@
 import { ApiProperty } from "@nestjs/swagger";
-import {
-  IsNotEmpty,
-  IsString,
-} from "class-validator";
+import { IsArray, IsNotEmpty, IsString } from "class-validator";
 import { ObjectId } from "mongodb";
 
 export class RegisterStoreDetailDTO {
@@ -15,10 +12,10 @@ export class RegisterStoreDetailDTO {
   @IsString()
   storeName: string;
 
-  @ApiProperty()
-  @IsNotEmpty()
-  @IsString()
-  category: string;
+  @ApiProperty({ type: [String], description: "Array of category names" })
+  @IsArray()
+  @IsString({ each: true })
+  category: string[];
 
   @ApiProperty()
   @IsNotEmpty()
