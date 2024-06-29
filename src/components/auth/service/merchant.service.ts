@@ -209,7 +209,7 @@ export class MerchantService extends CrudService {
         message: "Store Details Saved Successfully!",
       };
     } catch (error) {
-      console.log(error);
+      console.log(" error when save store detail", error);
       if (
         error.code === 11000 &&
         error.keyPattern &&
