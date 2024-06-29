@@ -1,0 +1,7 @@
+version: "3.8"
+
+services:
+  aagyo-server:
+    image: aagyo/aagyo-server:latest
+    ports:
+      - "8000:8080"
