@@ -450,7 +450,6 @@ export class MerchantService extends CrudService {
             category: { $eq: categoryId },
           },
         },
-
         {
           $match: {
             storeName: {

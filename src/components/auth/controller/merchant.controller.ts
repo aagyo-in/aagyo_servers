@@ -93,7 +93,6 @@ export class MerchantController {
     // })
     : Express.Multer.File
   ) {
-    console.log("banner", storeImage);
     return this.merchantService.registerStoreDetail(
       registerStoreDetailDTO,
       storeImage
