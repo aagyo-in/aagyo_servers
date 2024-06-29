@@ -14,7 +14,7 @@ class Slot {
 }
 @Schema({ timestamps: true })
 export class Store {
-  @Prop({ type: mongoose.Schema.Types.ObjectId, ref: "Merchant", unique: true })
+  @Prop({ type: mongoose.Schema.Types.ObjectId, ref: "Merchant", unique: true ,required:true})
   merchant_id: mongoose.Schema.Types.ObjectId;
 
   @Prop({ required: false })
