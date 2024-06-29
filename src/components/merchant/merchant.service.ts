@@ -380,7 +380,7 @@ export class MerchantService extends CrudService {
           $lookup: {
             from: "categories",
             localField: "category",
-            foreignField: "name",
+            foreignField: "_id",
             as: "categoryDetails",
           },
         },
