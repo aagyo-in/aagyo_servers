@@ -16,6 +16,8 @@ import { ObjectId } from "mongodb";
 import { addDays, addHours, format, parse } from "date-fns";
 import { CustomHttpException } from "src/exception/custom-http.exception";
 import { GetStoresDTO } from "./dto/stores/get-Stores.dto";
+import { group } from "console";
+import { GetStoreByCategory } from "./dto/stores/get-StoreByCategory.dto";
 
 @Injectable()
 export class MerchantService extends CrudService {
@@ -358,9 +360,130 @@ export class MerchantService extends CrudService {
 
       const result = await this.storeModel.aggregate(aggregatePipeline);
       return {
-        ststus: true,
+        status: true,
         message: "All Stores List",
         data: result[0],
+      };
+    } catch (error) {
+      new CustomHttpException(error.message);
+    }
+  }
+
+  async getAllStoresCategory(id: ObjectId, getStoresDTO: GetStoresDTO) {
+    const { limit, page, search } = getStoresDTO;
+    try {
+      const aggregatePipeline: any = [
+        {
+          $unwind: "$category",
+        },
+        {
+          $lookup: {
+            from: "categories",
+            localField: "category",
+            foreignField: "name",
+            as: "categoryDetails",
+          },
+        },
+        {
+          $unwind: "$categoryDetails",
+        },
+        {
+          $project: {
+            _id: "$categoryDetails._id",
+            name: "$categoryDetails.name",
+            banner: "$categoryDetails.banner",
+          },
+        },
+        {
+          $match: {
+            name: {
+              $regex: `${search || ""}`,
+              $options: "i",
+            },
+          },
+        },
+        {
+          $sort: {
+            createdAt: -1,
+          },
+        },
+        {
+          $facet: {
+            metadata: [
+              { $count: "total" },
+              {
+                $addFields: {
+                  page: +page,
+                  maxPage: {
+                    $ceil: {
+                      $divide: ["$total", +limit],
+                    },
+                  },
+                },
+              },
+            ],
+            data: [{ $skip: (+page - 1) * +limit }, { $limit: +limit }],
+          },
+        },
+      ];
+
+      const result = await this.storeModel.aggregate(aggregatePipeline);
+      return {
+        status: true,
+        message: "All Category List of stores",
+        data: result,
+      };
+    } catch (error) {
+      new CustomHttpException(error.message);
+    }
+  }
+
+  async getStoresByCategory(id: ObjectId, getStoresDTO: GetStoreByCategory) {
+    const { limit, page, search, categoryId } = getStoresDTO;
+    try {
+      const aggregatePipeline: any = [
+        {
+          $unwind: "$category",
+        },
+        {
+          $match: {
+            category: { $eq: categoryId },
+          },
+        },
+
+        {
+          $match: {
+            storeName: {
+              $regex: `${search || ""}`,
+              $options: "i",
+            },
+          },
+        },
+        {
+          $facet: {
+            metadata: [
+              { $count: "total" },
+              {
+                $addFields: {
+                  page: +page,
+                  maxPage: {
+                    $ceil: {
+                      $divide: ["$total", +limit],
+                    },
+                  },
+                },
+              },
+            ],
+            data: [{ $skip: (+page - 1) * +limit }, { $limit: +limit }],
+          },
+        },
+      ];
+
+      const result = await this.storeModel.aggregate(aggregatePipeline);
+      return {
+        status: true,
+        message: "All stores of Category",
+        data: result,
       };
     } catch (error) {
       new CustomHttpException(error.message);

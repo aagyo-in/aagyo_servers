@@ -14,6 +14,9 @@ export class Category {
 
   @Prop({ type: Boolean, default: true })
   status: boolean;
+
+  @Prop({ type: Boolean, default: false })
+  createdByAdmin: boolean;
 }
 
 export type CategoryDocument = Category & Document;

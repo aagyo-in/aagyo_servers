@@ -29,6 +29,7 @@ import { AuthGuard } from "src/guards/auth.guards";
 import { Public } from "src/decorators/public.decorator";
 import { FileInterceptor } from "@nestjs/platform-express";
 import { GetStoresDTO } from "./dto/stores/get-Stores.dto";
+import { GetStoreByCategory } from "./dto/stores/get-StoreByCategory.dto";
 
 @ApiBearerAuth()
 @UseGuards(AuthGuard)
@@ -41,7 +42,6 @@ export class MerchantController {
   @Get("/")
   @HttpCode(HttpStatus.OK)
   getAllMerchants(@Query() merchantSortFilterDTO: MerchantSortFilterDTO) {
-    console.log("hit");
     return this.merchantService.getAllMerchants(merchantSortFilterDTO);
   }
 
@@ -124,5 +124,32 @@ export class MerchantController {
     @Req() { user: { sub } }: any
   ) {
     return this.merchantService.getAllStores(sub, getStoresDto);
+  }
+
+  @Get("allStores-category")
+  @ApiQuery({ name: "page", type: String, required: true })
+  @ApiQuery({ name: "limit", type: String, required: true })
+  @ApiQuery({ name: "search", type: String, required: false })
+  @ApiOperation({ summary: "Get All Category of Store" })
+  @HttpCode(HttpStatus.OK)
+  getAllStoresCategory(
+    @Query() getStoresDto: GetStoresDTO,
+    @Req() { user: { sub } }: any
+  ) {
+    return this.merchantService.getAllStoresCategory(sub, getStoresDto);
+  }
+
+  @Get("storesByCategory")
+  @ApiQuery({ name: "categoryId", type: String, required: true })
+  @ApiQuery({ name: "page", type: String, required: true })
+  @ApiQuery({ name: "limit", type: String, required: true })
+  @ApiQuery({ name: "search", type: String, required: false })
+  @ApiOperation({ summary: "Get Stores using Category" })
+  @HttpCode(HttpStatus.OK)
+  getStoresByCategory(
+    @Query() getStoresDto: GetStoreByCategory,
+    @Req() { user: { sub } }: any
+  ) {
+    return this.merchantService.getStoresByCategory(sub, getStoresDto);
   }
 }

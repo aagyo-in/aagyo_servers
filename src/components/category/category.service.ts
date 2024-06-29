@@ -47,24 +47,26 @@ export class CategoryService extends CrudService {
     try {
       const aggregatePipeline: any = [
         {
-          $match: {},
+          $match: {
+            createdByAdmin: { $eq: true },
+          },
         },
         {
           $group: {
-            _id: null,
+            _id: "$_id",
             category: { $push: "$name" },
           },
         },
         {
           $project: {
-            _id: 0,
-            category: 1,
+            _id: 1,
+            category: { $arrayElemAt: ["$category", 0] },
           },
         },
       ];
       const result = await this.categoryModel.aggregate(aggregatePipeline);
       return {
-        result: result[0].category,
+        result: result,
       };
     } catch (err) {
       console.log(err);
