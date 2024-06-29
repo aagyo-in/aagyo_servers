@@ -20,7 +20,7 @@ export class Store {
   @Prop({ required: false })
   storeName: string;
 
-  @Prop({ required: false })
+  @Prop({ required: true })
   category: mongoose.Types.ObjectId[];
 
   @Prop({ required: false })

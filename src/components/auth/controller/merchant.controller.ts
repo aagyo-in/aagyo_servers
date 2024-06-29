@@ -87,6 +87,7 @@ export class MerchantController {
     storeImage: Express.Multer.File
   ) {
     console.log("storeImage", storeImage);
+    console.log("storedata", registerStoreDetailDTO);
     return this.merchantService.registerStoreDetail(
       registerStoreDetailDTO,
       storeImage

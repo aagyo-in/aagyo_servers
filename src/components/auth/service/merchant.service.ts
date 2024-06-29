@@ -27,6 +27,7 @@ import {
   DocumentDetailDocument,
 } from "src/Schema/documents";
 import { S3Service } from "src/components/s3/s3.service";
+import { CustomHttpException } from "src/exception/custom-http.exception";
 
 @Injectable()
 export class MerchantService extends CrudService {
@@ -198,7 +199,7 @@ export class MerchantService extends CrudService {
       const result = await this.storeModel.create({
         merchant_id: new ObjectId(id),
         storeName,
-        category: category?.map((item) => new ObjectId(item)),
+        category: category && category?.map((item) => new ObjectId(item)),
         country,
         state,
         city,
@@ -221,7 +222,7 @@ export class MerchantService extends CrudService {
           HttpStatus.CONFLICT
         );
       }
-      throw error;
+      throw new CustomHttpException(error.message);
     }
   }
 
