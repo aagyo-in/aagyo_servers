@@ -197,7 +197,7 @@ export class MerchantService extends CrudService {
       const result = await this.storeModel.create({
         merchant_id: new ObjectId(id),
         storeName,
-        category,
+        category: category?.map((item) => new ObjectId(item)),
         country,
         state,
         city,
