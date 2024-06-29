@@ -21,7 +21,7 @@ export class Store {
   storeName: string;
 
   @Prop({ required: false })
-  category: [mongoose.Schema.Types.ObjectId];
+  category: mongoose.Types.ObjectId[];
 
   @Prop({ required: false })
   country: string;
