@@ -7,6 +7,7 @@ import { CreateProductDTO } from "./dto/create-product.dto";
 import { ObjectId } from "mongodb";
 import { S3Service } from "../s3/s3.service";
 import { GetProductDTO } from "./dto/get-product.dto";
+import { CustomHttpException } from "src/exception/custom-http.exception";
 
 @Injectable()
 export class ProductService extends CrudService {
@@ -124,7 +125,7 @@ export class ProductService extends CrudService {
         data: result,
       };
     } catch (err) {
-      throw err;
+      throw new CustomHttpException(err.message);
     }
   }
 }
