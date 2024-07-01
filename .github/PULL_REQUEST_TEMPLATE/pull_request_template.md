@@ -26,6 +26,28 @@ Please delete options that are not relevant:
 - [ ] I have added tests that prove my fix is effective or that my feature works
 - [ ] New and existing unit tests pass locally with my changes
 
+## How Has This Been Tested?
+
+Please describe the tests that you ran to verify your changes. Provide instructions so that this can be reproduced.
+
+- [ ] Test A
+- [ ] Test B
+
+**Test Configuration**:
+
+- Firmware version:
+- Hardware:
+- Toolchain:
+- SDK:
+
+## Screenshots (if applicable)
+
+## Additional Context
+
+Add any other context about the pull request here.
+
+---
+
 ## Reviewer Checklist
 
 - [ ] Code follows project guidelines
