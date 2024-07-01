@@ -1,23 +1,19 @@
-import {
-  BadRequestException,
-  ForbiddenException,
-  Injectable,
-} from "@nestjs/common";
+import { BadRequestException, Injectable } from "@nestjs/common";
 import { CreateMerchantDTO } from "./dto/createMerchant.dto";
 import { CrudService } from "src/base/crud.service";
 import { InjectModel } from "@nestjs/mongoose";
 import { MERCHANT_MODEL, MerchantDocument } from "src/Schema/merchant";
-import mongoose, { Model } from "mongoose";
+import { Model } from "mongoose";
 import { ExceptionsHandler } from "@nestjs/core/exceptions/exceptions-handler";
 import { MerchantSortFilterDTO } from "./dto/merchantSortFilterDTO";
 import { StoreStatus } from "./dto/store-Status.dto";
 import { STORE_MODEL, StoreDocument } from "src/Schema/store";
 import { ObjectId } from "mongodb";
-import { addDays, addHours, format, parse } from "date-fns";
+import { addDays, addHours, parse } from "date-fns";
 import { CustomHttpException } from "src/exception/custom-http.exception";
 import { GetStoresDTO } from "./dto/stores/get-Stores.dto";
-import { group } from "console";
 import { GetStoreByCategory } from "./dto/stores/get-StoreByCategory.dto";
+import { PRODUCTMODEL, ProductDocument } from "src/Schema/product";
 
 @Injectable()
 export class MerchantService extends CrudService {
@@ -25,7 +21,9 @@ export class MerchantService extends CrudService {
     @InjectModel(MERCHANT_MODEL)
     private readonly merchantModel: Model<MerchantDocument>,
     @InjectModel(STORE_MODEL)
-    private readonly storeModel: Model<StoreDocument>
+    private readonly storeModel: Model<StoreDocument>,
+    @InjectModel(PRODUCTMODEL)
+    private readonly productModel: Model<ProductDocument>
   ) {
     super(merchantModel);
   }
@@ -33,7 +31,7 @@ export class MerchantService extends CrudService {
     merchantSortFilterDTO: MerchantSortFilterDTO
   ): Promise<any> {
     try {
-      const { limit, page, search, zone, city } = merchantSortFilterDTO;
+      const { limit, page, search, city } = merchantSortFilterDTO;
       const aggregationPipeline: any = [
         {
           $lookup: {
@@ -119,7 +117,6 @@ export class MerchantService extends CrudService {
     createMerchantDTO: CreateMerchantDTO
   ): Promise<{ message: string }> {
     try {
-      console.log(createMerchantDTO);
       const result = await this.merchantModel.create(createMerchantDTO);
       console.log(result);
       return {
@@ -485,7 +482,7 @@ export class MerchantService extends CrudService {
         data: result,
       };
     } catch (error) {
-      new CustomHttpException(error.message);
+      throw new CustomHttpException(error.message);
     }
   }
 }

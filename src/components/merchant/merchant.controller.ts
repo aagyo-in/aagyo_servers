@@ -152,4 +152,5 @@ export class MerchantController {
   ) {
     return this.merchantService.getStoresByCategory(sub, getStoresDto);
   }
+
 }
