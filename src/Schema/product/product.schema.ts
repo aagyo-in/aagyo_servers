@@ -56,7 +56,7 @@ export class Product {
   isOrganic: boolean;
 
   @Prop({ type: [Varients] })
-  varients: [Varients];
+  varients: Varients[];
 }
 
 export type ProductDocument = Product & Document;
