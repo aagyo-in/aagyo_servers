@@ -14,6 +14,7 @@ import { CustomHttpException } from "src/exception/custom-http.exception";
 import { GetStoresDTO } from "./dto/stores/get-Stores.dto";
 import { GetStoreByCategory } from "./dto/stores/get-StoreByCategory.dto";
 import { PRODUCTMODEL, ProductDocument } from "src/Schema/product";
+import { match } from "assert";
 
 @Injectable()
 export class MerchantService extends CrudService {
@@ -362,76 +363,7 @@ export class MerchantService extends CrudService {
         data: result[0],
       };
     } catch (error) {
-      new CustomHttpException(error.message);
-    }
-  }
-
-  async getAllStoresCategory(id: ObjectId, getStoresDTO: GetStoresDTO) {
-    const { limit, page, search } = getStoresDTO;
-    try {
-      const aggregatePipeline: any = [
-        {
-          $unwind: "$category",
-        },
-        {
-          $lookup: {
-            from: "categories",
-            localField: "category",
-            foreignField: "_id",
-            as: "categoryDetails",
-          },
-        },
-        {
-          $unwind: "$categoryDetails",
-        },
-        {
-          $project: {
-            _id: "$categoryDetails._id",
-            name: "$categoryDetails.name",
-            banner: "$categoryDetails.banner",
-          },
-        },
-        {
-          $match: {
-            name: {
-              $regex: `${search || ""}`,
-              $options: "i",
-            },
-          },
-        },
-        {
-          $sort: {
-            createdAt: -1,
-          },
-        },
-        {
-          $facet: {
-            metadata: [
-              { $count: "total" },
-              {
-                $addFields: {
-                  page: +page,
-                  maxPage: {
-                    $ceil: {
-                      $divide: ["$total", +limit],
-                    },
-                  },
-                },
-              },
-            ],
-            data: [{ $skip: (+page - 1) * +limit }, { $limit: +limit }],
-          },
-        },
-      ];
-
-      const result = await this.storeModel.aggregate(aggregatePipeline);
-      return {
-        status: true,
-        message: "All Category List of stores",
-        data: result,
-      };
-    } catch (error) {
-      new CustomHttpException(error.message);
+      throw new CustomHttpException(error.message);
     }
   }
 
@@ -444,7 +376,7 @@ export class MerchantService extends CrudService {
         },
         {
           $match: {
-            category: { $eq: categoryId },
+            category: { $eq: new ObjectId(categoryId) },
           },
         },
         {
@@ -478,7 +410,7 @@ export class MerchantService extends CrudService {
       const result = await this.storeModel.aggregate(aggregatePipeline);
       return {
         status: true,
-        message: "All stores of Category",
+        message: "All stores whoose exist this Category",
         data: result,
       };
     } catch (error) {
