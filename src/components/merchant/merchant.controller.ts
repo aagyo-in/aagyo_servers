@@ -126,18 +126,7 @@ export class MerchantController {
     return this.merchantService.getAllStores(sub, getStoresDto);
   }
 
-  @Get("allStores-category")
-  @ApiQuery({ name: "page", type: String, required: true })
-  @ApiQuery({ name: "limit", type: String, required: true })
-  @ApiQuery({ name: "search", type: String, required: false })
-  @ApiOperation({ summary: "Get All Category of Store" })
-  @HttpCode(HttpStatus.OK)
-  getAllStoresCategory(
-    @Query() getStoresDto: GetStoresDTO,
-    @Req() { user: { sub } }: any
-  ) {
-    return this.merchantService.getAllStoresCategory(sub, getStoresDto);
-  }
+
 
   @Get("storesByCategory")
   @ApiQuery({ name: "categoryId", type: String, required: true })

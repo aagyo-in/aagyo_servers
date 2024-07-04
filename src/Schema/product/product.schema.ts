@@ -17,19 +17,19 @@ class Varients {
   price: number;
 
   @Prop()
-  weigthOrCount: number;
-
-  @Prop()
   totalStock: number;
-
-  @Prop()
-  purchaseQuantitiy: number;
 
   @Prop()
   short: string;
 
   @Prop({ type: Array, required: true })
   productImage: [];
+
+  @Prop()
+  weigthOrCount: string;
+
+  @Prop()
+  purchaseQuantity: number;
 }
 
 @Schema({ timestamps: true })
@@ -38,7 +38,7 @@ export class Product {
   productOwner: ObjectId;
 
   @Prop({ required: true, ref: "Category" })
-  categoryId: [mongoose.Types.ObjectId];
+  categoryId: mongoose.Types.ObjectId[];
 
   @Prop({ required: true })
   productName: string;

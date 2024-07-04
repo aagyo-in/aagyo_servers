@@ -1,4 +1,4 @@
-import { Inject, Injectable } from "@nestjs/common";
+import { Injectable } from "@nestjs/common";
 import { InjectModel } from "@nestjs/mongoose";
 import { Model } from "mongoose";
 import { PRODUCTMODEL, ProductDocument } from "src/Schema/product";
@@ -8,7 +8,6 @@ import { ObjectId } from "mongodb";
 import { S3Service } from "../s3/s3.service";
 import { GetProductDTO } from "./dto/get-product.dto";
 import { CustomHttpException } from "src/exception/custom-http.exception";
-import { GetCategoryOfProducts } from "./dto/get-categoryOfProduct.dto";
 import { GetProductByCategory } from "./dto/get-productByCategory.dto";
 
 @Injectable()
@@ -35,15 +34,14 @@ export class ProductService extends CrudService {
         isOrganic,
         varients,
       } = createProductDTO;
+
       await this.productModel.create({
         productOwner: new ObjectId(id),
         productName,
-        categoryId: categoryId,
-
+        categoryId: categoryId && categoryId?.map((item) => new ObjectId(item)),
         description,
         keywords,
         tags,
-
         isOrganic,
         varients: varients,
       });
@@ -52,7 +50,7 @@ export class ProductService extends CrudService {
         status: "SUCCESS",
       };
     } catch (err) {
-      throw err;
+      throw new CustomHttpException(err.message);
     }
   }
 
@@ -131,97 +129,6 @@ export class ProductService extends CrudService {
     }
   }
 
-  async getCategoryOfStore(
-    categoryOfProducts: GetCategoryOfProducts,
-    userId: ObjectId
-  ) {
-    try {
-      const { storeId, limit, page, search } = categoryOfProducts;
-      const aggregatePipeline: any = [
-        {
-          $match: {
-            productOwner: new ObjectId(storeId),
-          },
-        },
-        {
-          $unwind: "$categoryId",
-        },
-        {
-          $project: {
-            categoryId: 1,
-          },
-        },
-        {
-          $group: {
-            _id: null,
-            uniqueCategoryIds: { $addToSet: "$categoryId" },
-          },
-        },
-        {
-          $project: {
-            _id: 0,
-            uniqueCategoryIds: 1,
-          },
-        },
-        {
-          $unwind: "$uniqueCategoryIds",
-        },
-        {
-          $lookup: {
-            from: "categories",
-            localField: "uniqueCategoryIds",
-            foreignField: "_id",
-            as: "categories",
-          },
-        },
-        {
-          $unwind: "$categories",
-        },
-        {
-          $project: {
-            _id: "$uniqueCategoryIds",
-            name: "$categories.name",
-            banner: "$categories.banner",
-            createdBy: "$categories.createdBy",
-          },
-        },
-        {
-          $match: {
-            name: {
-              $regex: `${search || ""}`,
-              $options: "i",
-            },
-          },
-        },
-        {
-          $facet: {
-            metadata: [
-              { $count: "total" },
-              {
-                $addFields: {
-                  page: +page,
-                  maxPage: {
-                    $ceil: {
-                      $divide: ["$total", +limit],
-                    },
-                  },
-                },
-              },
-            ],
-            data: [{ $skip: (+page - 1) * +limit }, { $limit: +limit }],
-          },
-        },
-      ];
-      const result = await this.productModel.aggregate(aggregatePipeline);
-      return {
-        status: true,
-        message: "All Category of a Store",
-        data: result,
-      };
-    } catch (error) {
-      throw new CustomHttpException(error.message);
-    }
-  }
   async getProductByASpecificCategory(
     getProductByCategory: GetProductByCategory,
     userId: ObjectId

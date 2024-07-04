@@ -195,7 +195,6 @@ export class MerchantService extends CrudService {
       const { id, address, category, city, country, storeName, state } =
         registerStoreDetailDTO;
       const uploadFile = await this.s3Service.uploadFile(banner);
-      console.log("uploadFile", uploadFile);
       const result = await this.storeModel.create({
         merchant_id: new ObjectId(id),
         storeName,

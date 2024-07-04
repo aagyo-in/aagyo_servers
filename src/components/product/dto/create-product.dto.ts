@@ -62,12 +62,8 @@ export class VARIENTS {
 
   @ApiProperty()
   @IsOptional()
-  @IsNumber()
-  @Transform(({ value }) => {
-    const numberValue = Number(value);
-    return isNaN(numberValue) ? value : numberValue;
-  })
-  weightOrCount: number;
+  @IsString()
+  weigthOrCount: string;
 
   @ApiProperty()
   @IsOptional()
@@ -100,9 +96,10 @@ export class VARIENTS {
 }
 
 export class CreateProductDTO {
-  @ApiProperty({ type: [String], description: "Array of category IDs" })
-  @IsNotEmpty()
-  categoryId: [ObjectId];
+  @ApiProperty({ type: [String], description: "Array of category Ids" })
+  @IsArray()
+  @IsString({ each: true })
+  categoryId: string[];
 
   @ApiProperty()
   @IsNotEmpty()

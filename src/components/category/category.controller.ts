@@ -12,6 +12,7 @@ import {
   UseGuards,
   Req,
   Delete,
+  Query,
 } from "@nestjs/common";
 import { CategoryService } from "./category.service";
 import { CreateCategoryDTO } from "./dto/create-category.dto";
@@ -21,13 +22,16 @@ import {
   ApiBody,
   ApiOperation,
   ApiParam,
+  ApiQuery,
   ApiTags,
 } from "@nestjs/swagger";
 import { CategoryStatusDTO } from "./dto/update-status.dto";
 import { AuthGuard } from "src/guards/auth.guards";
-import { Public } from "src/decorators/public.decorator";
 import { ObjectId } from "mongodb";
+import { GetProductsCategory } from "./dto/get-productsCategory.dto";
+import { GetStoresCategory } from "./dto/get-categoryOfStore.dto";
 
+@ApiBearerAuth()
 @ApiTags("Category")
 @Controller("category")
 export class CategoryController {
@@ -40,15 +44,8 @@ export class CategoryController {
   createCategory(
     @Req() { user }: any,
     @Body() createCategoryDTO: CreateCategoryDTO,
-    @UploadedFile() // new ParseFilePipe({
-    //     new MaxFileSizeValidator({ maxSize: 10000000 }),
-    file //   validators: [
-    //     new FileTypeValidator({
-    //       fileType: /(image\/jpeg|image\/png|application\/pdf)/,
-    //     }),
-    //   ],
-    // })
-    : Express.Multer.File
+    @UploadedFile()
+    file: Express.Multer.File
   ) {
     return this.categoryService.createCategory(user, createCategoryDTO, file);
   }
@@ -89,6 +86,36 @@ export class CategoryController {
     return this.categoryService.deleteCategoryById(id);
   }
 
-  // @UseGuards(AuthGuard)
-  // @ApiOperation({summary:'Get Store by Category'})
+  @UseGuards(AuthGuard)
+  @Get("allstores-category")
+  @ApiQuery({ name: "page", type: String, required: true })
+  @ApiQuery({ name: "limit", type: String, required: true })
+  @ApiQuery({ name: "search", type: String, required: false })
+  @ApiOperation({
+    summary: "Get All Category of Store.",
+  })
+  @HttpCode(HttpStatus.OK)
+  getAllStoresCategory(
+    @Query() getStoresCategory: GetStoresCategory,
+    @Req() { user: { sub } }: any
+  ) {
+    return this.categoryService.getAllStoresCategory(sub, getStoresCategory);
+  }
+
+  @UseGuards(AuthGuard)
+  @Get("category_of_products")
+  @ApiQuery({ name: "merchantId", type: String, required: true })
+  @ApiQuery({ name: "page", type: String, required: true })
+  @ApiQuery({ name: "limit", type: String, required: true })
+  @ApiQuery({ name: "search", type: String, required: false })
+  @ApiOperation({
+    summary: "Get category of Products from a specific store.",
+  })
+  @HttpCode(HttpStatus.OK)
+  getCategoryOfStore(
+    @Query() categoryOfProducts: GetProductsCategory,
+    @Req() { user: { sub } }: any
+  ) {
+    return this.categoryService.getCategoryOfStore(categoryOfProducts, sub);
+  }
 }
