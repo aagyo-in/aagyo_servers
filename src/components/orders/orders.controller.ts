@@ -16,6 +16,7 @@ import { AuthGuard } from "src/guards/auth.guards";
 import { UpdateOrderStatusDTO } from "./dto/update-status.dto";
 import { OrderHistoryDTO } from "./dto/order-history.dto";
 import { Public } from "src/decorators/public.decorator";
+import { CreateOrderDTO } from "./dto/create-order.dto";
 
 @UseGuards(AuthGuard)
 @ApiBearerAuth()
@@ -24,15 +25,20 @@ import { Public } from "src/decorators/public.decorator";
 export class OrdersController {
   constructor(readonly ordersService: OrdersService) {}
 
-  @Post()
-  createOrder() {
+  @ApiOperation({ summary: "Create Order" })
+  @HttpCode(HttpStatus.CREATED)
+  @Post("/create")
+  createOrder(
+    @Body() createOrderDTO: CreateOrderDTO,
+    @Req() { user: { sub } }: any
+  ) {
     return this.ordersService.createOrder();
   }
 
   @Get("/delivered")
   @ApiOperation({ summary: "Get Analytics Report of Delivered Order" })
   @HttpCode(HttpStatus.OK)
-  getDeliveredOrderDetails(@Req() { sub }: any) {
+  getDeliveredOrderDetails(@Req() { user: { sub } }: any) {
     return this.ordersService.getDeliveredOrderDetails(sub);
   }
 

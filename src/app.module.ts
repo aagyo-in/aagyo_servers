@@ -20,6 +20,7 @@ import { ProductModule } from "./components/product/product.module";
 import { MailModule } from "./components/mail/mail.module";
 import { OrdersModule } from "./components/orders/orders.module";
 import { WalletModule } from "./components/wallet/wallet.module";
+import { UserModule } from './components/user/user.module';
 
 @Module({
   imports: [
@@ -46,7 +47,8 @@ import { WalletModule } from "./components/wallet/wallet.module";
     ProductModule,
     MailModule,
     OrdersModule,
-    WalletModule
+    WalletModule,
+    UserModule
   ],
   controllers: [AppController],
   providers: [AppService],
