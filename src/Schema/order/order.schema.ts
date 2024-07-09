@@ -4,7 +4,7 @@ import { Document } from "mongoose";
 
 enum ORDERSTATUS {
   DUE = "DUE",
-  PROCESSING = "PROCESSING",
+  PROCESSING = "PROCESSING", 
   READYTOPICK = "READY TO PICK",
   ONTHEWAY = "ON THE WAY",
   DELIVERED = "DELIVERED",

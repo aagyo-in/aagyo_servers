@@ -126,8 +126,6 @@ export class MerchantController {
     return this.merchantService.getAllStores(sub, getStoresDto);
   }
 
-
-
   @Get("storesByCategory")
   @ApiQuery({ name: "categoryId", type: String, required: true })
   @ApiQuery({ name: "page", type: String, required: true })
@@ -141,5 +139,4 @@ export class MerchantController {
   ) {
     return this.merchantService.getStoresByCategory(sub, getStoresDto);
   }
-
 }

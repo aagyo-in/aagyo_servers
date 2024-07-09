@@ -4,7 +4,7 @@ import { UserService } from "../service/user.service";
 import { MerchantLoginDTO } from "../dto/merchantLogin.dto";
 import { VerifyOTPDTO } from "../dto/verifyOTP.dto";
 
-@ApiTags("user")
+@ApiTags("Authantication User")
 @Controller("user")
 export class UserController {
   constructor(private readonly userService: UserService) {}

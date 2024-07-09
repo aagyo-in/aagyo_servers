@@ -1,20 +1,14 @@
 import {
   Body,
   Controller,
-  FileTypeValidator,
   Get,
   HttpCode,
   HttpStatus,
-  MaxFileSizeValidator,
   Param,
   ParseFilePipe,
-  ParseIntPipe,
   Post,
-  Query,
-  Req,
   UploadedFile,
   UploadedFiles,
-  UseGuards,
   UseInterceptors,
 } from "@nestjs/common";
 import { MerchantLoginDTO } from "../dto/merchantLogin.dto";
@@ -32,16 +26,7 @@ import { RegisterOwnerDetailDTO } from "../dto/registerDTO/register-ownerDetail.
 import { RegisterBankDetailDTO } from "../dto/registerDTO/register-bankDetails.dto";
 import { RegisterDocumentDTO } from "../dto/registerDTO/register-document.dto";
 import { RegisterTime } from "../dto/registerDTO/register-registerTime.dto";
-import { RegisterMerchantDTO } from "../dto/registerDTO/register.dto";
-import mongoose, { ObjectId } from "mongoose";
-import {
-  AnyFilesInterceptor,
-  FileFieldsInterceptor,
-  FileInterceptor,
-  FilesInterceptor,
-} from "@nestjs/platform-express";
-import { IsObject, buildMessage } from "class-validator";
-import { AuthGuard } from "src/guards/auth.guards";
+import { FileInterceptor, FilesInterceptor } from "@nestjs/platform-express";
 
 // @UseGuards(AuthGuard)
 @ApiTags("Authantication Merchant")
