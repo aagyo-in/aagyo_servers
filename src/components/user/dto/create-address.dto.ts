@@ -81,6 +81,11 @@ export class CreateAddressDTO {
   @IsString()
   phone: string;
 
+  @ApiProperty()
+  @IsString()
+  @IsOptional()
+  alternatePhone: string;
+
   @ApiProperty({ type: AddressDTO })
   @IsObject()
   address: AddressDTO;
