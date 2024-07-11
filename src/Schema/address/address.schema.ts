@@ -35,6 +35,9 @@ export class Address {
   phone: string;
 
   @Prop()
+  alternatePhone: string;
+
+  @Prop()
   address: ADDRESS;
 }
 
