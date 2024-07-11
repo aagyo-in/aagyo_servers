@@ -18,11 +18,39 @@ export class UserService extends CrudService {
   async savedAddress(userId: any, createAddressDTO: CreateAddressDTO) {
     try {
       const id = new ObjectId(userId);
-      await this.addressModel.create({ ...createAddressDTO });
+      await this.addressModel.create({ ...createAddressDTO, userId: id });
       return {
         status: "SUCCESS",
         message: "Address saved Successfully!",
         data: [],
+      };
+    } catch (error) {
+      throw new CustomHttpException(error.message);
+    }
+  }
+
+  async getAllAddress(userId: any, search: string = "") {
+    try {
+      const aggregatePipeline: any = [
+        {
+          $match: {
+            $and: [
+              { userId: new ObjectId(userId) },
+              {
+                $or: [
+                  { name: { $regex: search, $options: "i" } },
+                  { phone: { $regex: search, $options: "i" } },
+                ],
+              },
+            ],
+          },
+        },
+      ];
+      const data = await this.addressModel.aggregate(aggregatePipeline);
+      return {
+        status: "SUCCESS",
+        message: "User Address!",
+        data: data,
       };
     } catch (error) {
       throw new CustomHttpException(error.message);
