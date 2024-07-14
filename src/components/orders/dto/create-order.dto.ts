@@ -1,29 +1,37 @@
 import { ApiProperty } from "@nestjs/swagger";
-import { Type } from "class-transformer";
-import { IsEnum, IsNumber, IsString, ValidateNested } from "class-validator";
+import { Transform, Type } from "class-transformer";
+import {
+  IsEnum,
+  IsNotEmpty,
+  IsNumber,
+  IsOptional,
+  IsString,
+  ValidateNested,
+} from "class-validator";
 
 class PRODUCT {
   @ApiProperty()
+  @IsNotEmpty()
   @IsString()
-  productName?: string;
+  productId?: string;
 
   @ApiProperty()
   @IsNumber()
   productQuantity?: number;
-
-  @ApiProperty()
-  @IsNumber()
-  strikePrice?: number;
-
-  @ApiProperty()
-  @IsNumber()
-  price?: number;
 }
 
 enum PAYMENTMODE {
   ONLINE = "ONLINE",
   COD = "COD",
   WALLET = "WALLET",
+}
+
+enum DELIVERY_INSTRUCTION {
+  AVOID_CALL = "AVOID_CALL",
+  DONT_BELL = "DONT_BELL",
+  LEAVE_AT_DOOR = "LEAVE_AT_DOOR",
+  LEAVE_WITH_GAURD = "LEAVE_WITH_GAURD",
+  PET_AT_HOME = "PET_AT_HOME",
 }
 
 export class CreateOrderDTO {
@@ -34,11 +42,11 @@ export class CreateOrderDTO {
 
   @ApiProperty()
   @IsString()
-  instructions?: string;
+  addressId?: string;
 
   @ApiProperty()
-  @IsNumber()
-  subTotal?: number;
+  @IsString()
+  instructions?: string;
 
   @ApiProperty()
   @IsNumber()
@@ -54,11 +62,22 @@ export class CreateOrderDTO {
 
   @ApiProperty()
   @IsString()
-  coupon?: string;
+  @IsOptional()
+  couponId?: string;
 
   @ApiProperty()
-  @IsString()
-  partnerTip?: string;
+  @IsNumber()
+  @IsOptional()
+  partnerTip?: number;
+
+  @ApiProperty({
+    enum: DELIVERY_INSTRUCTION,
+    enumName: "Delivery Instruction",
+    type: [DELIVERY_INSTRUCTION],
+    isArray: true,
+  })
+  @IsEnum(DELIVERY_INSTRUCTION, { each: true })
+  deliveryInstruction?: DELIVERY_INSTRUCTION[];
 
   @ApiProperty({ enum: PAYMENTMODE, enumName: "Payment Type" })
   @IsString()

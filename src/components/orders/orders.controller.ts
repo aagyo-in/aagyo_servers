@@ -4,19 +4,28 @@ import {
   Get,
   HttpCode,
   HttpStatus,
-  Patch,
+  Param,
   Post,
   Query,
   Req,
   UseGuards,
 } from "@nestjs/common";
 import { OrdersService } from "./orders.service";
-import { ApiBearerAuth, ApiBody, ApiOperation, ApiTags } from "@nestjs/swagger";
+import {
+  ApiBearerAuth,
+  ApiBody,
+  ApiOperation,
+  ApiParam,
+  ApiQuery,
+  ApiTags,
+} from "@nestjs/swagger";
 import { AuthGuard } from "src/guards/auth.guards";
 import { UpdateOrderStatusDTO } from "./dto/update-status.dto";
-import { OrderHistoryDTO } from "./dto/order-history.dto";
+import { OrderHistoryDTO, ORDERSTATUS } from "./dto/order-history.dto";
 import { Public } from "src/decorators/public.decorator";
 import { CreateOrderDTO } from "./dto/create-order.dto";
+import { GetOrdersDTO } from "./dto/get-orders.dto";
+import mongoose from "mongoose";
 
 @UseGuards(AuthGuard)
 @ApiBearerAuth()
@@ -32,7 +41,33 @@ export class OrdersController {
     @Body() createOrderDTO: CreateOrderDTO,
     @Req() { user: { sub } }: any
   ) {
-    return this.ordersService.createOrder();
+    return this.ordersService.createOrder(sub, createOrderDTO);
+  }
+
+  @ApiOperation({ summary: "Get All orders of a specific user" })
+  @HttpCode(HttpStatus.OK)
+  @ApiQuery({ name: "orderStatus", type: String, required: true })
+  @ApiQuery({ name: "orderType", type: String, required: true })
+  @ApiQuery({ name: "day", type: String, required: false })
+  @ApiQuery({ name: "page", type: String, required: false })
+  @ApiQuery({ name: "limit", type: String, required: false })
+  @Get("/getOrders-user")
+  getAllOrderOfSpeciificUser(
+    @Req() { user: { sub } }: any,
+    @Query() getOrdersDTO: GetOrdersDTO
+  ) {
+    return this.ordersService.getAllOrderOfSpeciificUser(sub, getOrdersDTO);
+  }
+
+  @ApiOperation({ summary: "Get a specific order" })
+  @ApiParam({ name: "id", type: String, description: "Order ID" })
+  @HttpCode(HttpStatus.OK)
+  @Get("/getOrderById/:id")
+  getASpecificOrderById(
+    @Req() { user: { sub } }: any,
+    @Param("id") id: mongoose.ObjectId
+  ) {
+    return this.ordersService.getASpecificOrderById(sub, id);
   }
 
   @Get("/delivered")

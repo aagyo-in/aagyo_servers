@@ -21,6 +21,7 @@ import { MailModule } from "./components/mail/mail.module";
 import { OrdersModule } from "./components/orders/orders.module";
 import { WalletModule } from "./components/wallet/wallet.module";
 import { UserModule } from './components/user/user.module';
+import { RatingModule } from './components/rating/rating.module';
 
 @Module({
   imports: [
@@ -48,7 +49,8 @@ import { UserModule } from './components/user/user.module';
     MailModule,
     OrdersModule,
     WalletModule,
-    UserModule
+    UserModule,
+    RatingModule
   ],
   controllers: [AppController],
   providers: [AppService],

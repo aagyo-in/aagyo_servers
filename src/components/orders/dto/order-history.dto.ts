@@ -1,16 +1,7 @@
 import { ApiProperty, ApiPropertyOptional } from "@nestjs/swagger";
-import { Transform } from "class-transformer";
-import {
-  IsEnum,
-  IsInt,
-  IsNumber,
-  IsOptional,
-  IsString,
-  Max,
-  Min,
-} from "class-validator";
+import { IsEnum, IsOptional, IsString } from "class-validator";
 
-enum ORDERSTATUS {
+export enum ORDERSTATUS {
   DELIVERED = "DELIVERED",
   CANCELLED = "INACTIVE",
   REJECTED = "REJECTED",
@@ -48,6 +39,7 @@ export class OrderHistoryDTO {
   @ApiProperty({ enum: DAY, enumName: "Day" })
   @IsString()
   @IsEnum(DAY)
+  @IsOptional()
   day?: DAY = DAY.TODAY;
 
   @ApiProperty({ default: 1, type: Number, minimum: 1 })
