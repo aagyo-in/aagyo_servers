@@ -14,13 +14,6 @@ enum ADDRESSOWNER {
   ANOTHER = "ANOTHER",
 }
 
-enum ADDRESSTYPE {
-  HOME = "HOME",
-  WORK = "WORK",
-  HOTEL = "HOTEL",
-  OTHER = "OTHER",
-}
-
 class AddressDTO {
   @ApiProperty()
   @IsString()
@@ -63,15 +56,9 @@ export class CreateAddressDTO {
   @IsNotEmpty()
   addressOwner: ADDRESSOWNER;
 
-  @ApiProperty({
-    enum: ADDRESSTYPE,
-    enumName: "Address Type",
-    example: ADDRESSTYPE.HOME,
-  })
+  @ApiProperty()
   @IsString()
-  @ValidateIf((o) => o.addressOwner === ADDRESSOWNER.SELF)
-  @IsEnum(ADDRESSTYPE)
-  addressType?: ADDRESSTYPE;
+  addressType?: string;
 
   @ApiProperty()
   @IsString()

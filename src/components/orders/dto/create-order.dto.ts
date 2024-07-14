@@ -1,6 +1,7 @@
 import { ApiProperty } from "@nestjs/swagger";
 import { Transform, Type } from "class-transformer";
 import {
+  IsArray,
   IsEnum,
   IsNotEmpty,
   IsNumber,
@@ -24,14 +25,6 @@ enum PAYMENTMODE {
   ONLINE = "ONLINE",
   COD = "COD",
   WALLET = "WALLET",
-}
-
-enum DELIVERY_INSTRUCTION {
-  AVOID_CALL = "AVOID_CALL",
-  DONT_BELL = "DONT_BELL",
-  LEAVE_AT_DOOR = "LEAVE_AT_DOOR",
-  LEAVE_WITH_GAURD = "LEAVE_WITH_GAURD",
-  PET_AT_HOME = "PET_AT_HOME",
 }
 
 export class CreateOrderDTO {
@@ -70,14 +63,9 @@ export class CreateOrderDTO {
   @IsOptional()
   partnerTip?: number;
 
-  @ApiProperty({
-    enum: DELIVERY_INSTRUCTION,
-    enumName: "Delivery Instruction",
-    type: [DELIVERY_INSTRUCTION],
-    isArray: true,
-  })
-  @IsEnum(DELIVERY_INSTRUCTION, { each: true })
-  deliveryInstruction?: DELIVERY_INSTRUCTION[];
+  @ApiProperty()
+  @IsArray()
+  deliveryInstruction?: [string];
 
   @ApiProperty({ enum: PAYMENTMODE, enumName: "Payment Type" })
   @IsString()
