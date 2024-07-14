@@ -22,6 +22,7 @@ import { OrdersModule } from "./components/orders/orders.module";
 import { WalletModule } from "./components/wallet/wallet.module";
 import { UserModule } from './components/user/user.module';
 import { RatingModule } from './components/rating/rating.module';
+import { TransactionModule } from './components/transaction/transaction.module';
 
 @Module({
   imports: [
@@ -50,7 +51,8 @@ import { RatingModule } from './components/rating/rating.module';
     OrdersModule,
     WalletModule,
     UserModule,
-    RatingModule
+    RatingModule,
+    TransactionModule
   ],
   controllers: [AppController],
   providers: [AppService],

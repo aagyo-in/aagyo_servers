@@ -19,7 +19,7 @@ import { TransactionDTO } from "../dto/merchant/transaction.dto";
 export class UserWallletController {
   constructor(private readonly merchantWalletService: MerchantWalletService) {}
 
-  @Get("transactions")
+  @Get("history")
   @ApiOperation({ summary: "Get Transactions History" })
   @HttpCode(HttpStatus.OK)
   getTransactionHistory(
