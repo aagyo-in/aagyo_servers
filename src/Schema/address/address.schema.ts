@@ -26,7 +26,7 @@ export class Address {
   addressOwner: string = "SELF";
 
   @Prop()
-  addressType: string = "HOME";
+  addressType: string;
 
   @Prop({ required: true })
   name: string;

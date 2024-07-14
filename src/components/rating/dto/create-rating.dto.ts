@@ -1,5 +1,12 @@
 import { ApiProperty } from "@nestjs/swagger";
-import { IsNumber, IsOptional, IsString, Max, Min } from "class-validator";
+import {
+  IsArray,
+  IsNumber,
+  IsOptional,
+  IsString,
+  Max,
+  Min,
+} from "class-validator";
 
 class ProductRating {
   @ApiProperty()
@@ -8,7 +15,13 @@ class ProductRating {
 
   @ApiProperty()
   @IsNumber()
+  @IsOptional()
   rating: number;
+
+  @ApiProperty()
+  @IsArray()
+  @IsOptional()
+  description: [string];
 }
 export class CreateRatingDto {
   @ApiProperty({
@@ -27,6 +40,11 @@ export class CreateRatingDto {
   @IsNumber()
   @IsOptional()
   rating: number;
+
+  @ApiProperty()
+  @IsArray()
+  @IsOptional()
+  description: [string];
 
   @ApiProperty({ type: [ProductRating] })
   products: ProductRating[];

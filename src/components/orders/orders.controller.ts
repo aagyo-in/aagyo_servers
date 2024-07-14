@@ -46,11 +46,11 @@ export class OrdersController {
 
   @ApiOperation({ summary: "Get All orders of a specific user" })
   @HttpCode(HttpStatus.OK)
-  @ApiQuery({ name: "orderStatus", type: String, required: true })
-  @ApiQuery({ name: "orderType", type: String, required: true })
+  @ApiQuery({ name: "orderStatus", type: String, required: false })
+  @ApiQuery({ name: "orderType", type: String, required: false })
   @ApiQuery({ name: "day", type: String, required: false })
-  @ApiQuery({ name: "page", type: String, required: false })
-  @ApiQuery({ name: "limit", type: String, required: false })
+  @ApiQuery({ name: "page", type: String, required: true })
+  @ApiQuery({ name: "limit", type: String, required: true })
   @Get("/getOrders-user")
   getAllOrderOfSpeciificUser(
     @Req() { user: { sub } }: any,
