@@ -92,32 +92,87 @@ export class OrdersService extends CrudService {
             ],
           },
         },
-        // {
-        //   $lookup: {
-        //     from: "users",
-        //     localField: "userId",
-        //     foreignField: "_id",
-        //     as: "user",
-        //   },
-        // },
-        // {
-        //   $facet: {
-        //     metadata: [
-        //       { $count: "total" },
-        //       {
-        //         $addFields: {
-        //           page: +page,
-        //           maxPage: {
-        //             $ceil: {
-        //               $divide: ["$total", +limit],
-        //             },
-        //           },
-        //         },
-        //       },
-        //     ],
-        //     data: [{ $skip: (+page - 1) * +limit }, { $limit: +limit }],
-        //   },
-        // },
+        {
+          $unwind: "$products",
+        },
+        {
+          $lookup: {
+            from: "products",
+            localField: "products.productId",
+            foreignField: "_id",
+            as: "product",
+          },
+        },
+        {
+          $unwind: "$product",
+        },
+        {
+          $addFields: {
+            productVarient: {
+              $filter: {
+                input: "$product.varients",
+                as: "variant",
+                cond: { $eq: ["$$variant._id", "$products.varientId"] },
+              },
+            },
+          },
+        },
+        {
+          $unwind: "$productVarient",
+        },
+        {
+          $project: {
+            handlingCharge: 1,
+            deliveryCharge: 1,
+            totalPrice: 1,
+            partnerTip: 1,
+            paymentType: 1,
+            orderStatus: 1,
+            orderType: 1,
+            product: {
+              productName: "$product.productName",
+              productQuantity: "$products.productQuantity",
+              mrp: "$productVarient.mrp",
+              price: "$productVarient.price",
+              weigthOrCount: "$productVarient.weigthOrCount",
+              isOrganic: "$product.isOrganic",
+              productImage: {
+                $arrayElemAt: ["$productVarient.productImage", 0],
+              },
+            },
+          },
+        },
+        {
+          $group: {
+            _id: "$_id", // Group by _id or any other unique identifier
+            handlingCharge: { $first: "$handlingCharge" },
+            deliveryCharge: { $first: "$deliveryCharge" },
+            totalPrice: { $first: "$totalPrice" },
+            partnerTip: { $first: "$partnerTip" },
+            paymentType: { $first: "$paymentType" },
+            orderStatus: { $first: "$orderStatus" },
+            orderType: { $first: "$orderType" },
+            products: { $push: "$product" }, // Push products into an array
+          },
+        },
+        {
+          $facet: {
+            metadata: [
+              { $count: "total" },
+              {
+                $addFields: {
+                  page: +page,
+                  maxPage: {
+                    $ceil: {
+                      $divide: ["$total", +limit],
+                    },
+                  },
+                },
+              },
+            ],
+            data: [{ $skip: (+page - 1) * +limit }, { $limit: +limit }],
+          },
+        },
       ];
       const data = await this.orderModel.aggregate(aggregatePipeline);
       return {

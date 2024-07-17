@@ -76,6 +76,7 @@ export class CartService {
               productName: "$product.productName",
               description: "$product.description",
               isOrganic: "$product.isOrganic",
+              varientId: "$productVarient._id",
               mrp: "$productVarient.mrp",
               price: "$productVarient.price",
               productImage: {
