@@ -10,7 +10,7 @@ export class AddCartDto {
   @IsString()
   varientId: string;
 
-  @ApiProperty({ type: Number })
+  @ApiProperty({ type: Number, default: 1 })
   @IsNumber()
   quantity: number;
 }

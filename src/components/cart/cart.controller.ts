@@ -7,12 +7,16 @@ import {
   HttpCode,
   HttpStatus,
   Param,
+  Delete,
+  Get,
+  Patch,
 } from "@nestjs/common";
 import { CartService } from "./cart.service";
 import { AddCartDto } from "./dto/add-cart.dto";
-import { UpdateCartDto } from "./dto/update-cart.dto";
+import { UpdateCartDTO } from "./dto/update-cart.dto";
 import {
   ApiBearerAuth,
+  ApiBody,
   ApiOperation,
   ApiParam,
   ApiTags,
@@ -35,7 +39,7 @@ export class CartController {
 
   @ApiOperation({ summary: "Get Cart" })
   @HttpCode(HttpStatus.OK)
-  @Post("get")
+  @Get("")
   getCart(@Req() { user: { sub } }: any) {
     return this.cartService.getCart(sub);
   }
@@ -43,8 +47,21 @@ export class CartController {
   @ApiOperation({ summary: "Delete Item from Cart" })
   @HttpCode(HttpStatus.OK)
   @ApiParam({ name: "id", type: String })
-  @Post("get/:id")
+  @Delete("delete/:id")
   deleteFromCart(@Req() { user: { sub } }: any, @Param("id") id: any) {
-    return this.cartService.deleteFromCart(sub,id);
+    return this.cartService.deleteFromCart(sub, id);
+  }
+
+  @ApiOperation({ summary: "Update Item from Cart" })
+  @HttpCode(HttpStatus.CREATED)
+  @ApiParam({ name: "id", type: String })
+  @ApiBody({ type: UpdateCartDTO })
+  @Patch("update/:id")
+  updateCartItem(
+    @Req() { user: { sub } }: any,
+    @Param("id") id: any,
+    @Body() updateCartDTO: UpdateCartDTO
+  ) {
+    return this.cartService.updateCartItem(sub, id, updateCartDTO);
   }
 }

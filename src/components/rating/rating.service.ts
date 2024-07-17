@@ -48,26 +48,26 @@ export class RatingService {
             productId: new ObjectId(productID),
           },
         },
-        {
-          $lookup: {
-            from: "users",
-            localField: "userId",
-            foreignField: "_id",
-            as: "user",
-          },
-        },
-        {
-          $unwind: "$user",
-        },
+        // {
+        //   $lookup: {
+        //     from: "users",
+        //     localField: "userId",
+        //     foreignField: "_id",
+        //     as: "user",
+        //   },
+        // },
+        // {
+        //   $unwind: "$user",
+        // },
         {
           $project: {
-            productId: 1,
+            // productId: 1,
             rating: 1,
             description: 1,
             createdAt: 1,
-            user: {
-              phoneNumber: "$user.phoneNumber",
-            },
+            // user: {
+            //   phoneNumber: "$user.phoneNumber",
+            // },
           },
         },
       ];
