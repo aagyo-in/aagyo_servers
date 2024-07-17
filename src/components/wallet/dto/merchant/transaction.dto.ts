@@ -3,9 +3,8 @@ import { IsEnum } from "class-validator";
 
 export enum TRANSACTIONFILTER {
   ALL = "ALL",
-  DELIVERED = "DELIVERED",
-  CANCEL = "CANCEL",
-  REJECTED = "REJECTED",
+  PURCHASE = "PURCHASE",
+  CASHBACK = "CASHBACK",
 }
 
 export class TransactionDTO {

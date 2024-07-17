@@ -9,7 +9,12 @@ import {
 } from "@nestjs/common";
 import { MerchantWalletService } from "../service/merchantWallet.service";
 import { AuthGuard } from "src/guards/auth.guards";
-import { ApiBearerAuth, ApiOperation, ApiTags } from "@nestjs/swagger";
+import {
+  ApiBearerAuth,
+  ApiOperation,
+  ApiQuery,
+  ApiTags,
+} from "@nestjs/swagger";
 import { TransactionDTO } from "../dto/merchant/transaction.dto";
 
 @UseGuards(AuthGuard)
@@ -19,8 +24,11 @@ import { TransactionDTO } from "../dto/merchant/transaction.dto";
 export class UserWallletController {
   constructor(private readonly merchantWalletService: MerchantWalletService) {}
 
-  @Get("transactions")
-  @ApiOperation({ summary: "Get Transactions History" })
+  @Get("history")
+  @ApiOperation({ summary: "Get Wallet History" })
+  @ApiQuery({ name: "filter" ,required:false})
+  @ApiQuery({ name: "page" })
+  @ApiQuery({ name: "limit" })
   @HttpCode(HttpStatus.OK)
   getTransactionHistory(
     @Req() { user: { sub } }: any,

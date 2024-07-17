@@ -35,10 +35,15 @@ export class OrdersService extends CrudService {
     try {
       const order = await this.orderModel.create({
         userId: new ObjectId(userId),
-        products: products?.map(({ productId, productQuantity }: any) => {
-          productId: new ObjectId(productId);
-          productQuantity: productQuantity;
-        }),
+        products: products?.map(
+          ({ productId, productQuantity, varientId }: any) => {
+            return {
+              productId: new ObjectId(productId),
+              varientId: new ObjectId(varientId),
+              productQuantity: productQuantity,
+            };
+          }
+        ),
         instructions,
         handlingCharge,
         deliveryCharge,
@@ -58,7 +63,7 @@ export class OrdersService extends CrudService {
         data: data,
       };
     } catch (error) {
-      throw new ExceptionsHandler(error);
+      throw new CustomHttpException(error?.message);
     }
   }
 
@@ -87,24 +92,32 @@ export class OrdersService extends CrudService {
             ],
           },
         },
-        {
-          $facet: {
-            metadata: [
-              { $count: "total" },
-              {
-                $addFields: {
-                  page: +page,
-                  maxPage: {
-                    $ceil: {
-                      $divide: ["$total", +limit],
-                    },
-                  },
-                },
-              },
-            ],
-            data: [{ $skip: (+page - 1) * +limit }, { $limit: +limit }],
-          },
-        },
+        // {
+        //   $lookup: {
+        //     from: "users",
+        //     localField: "userId",
+        //     foreignField: "_id",
+        //     as: "user",
+        //   },
+        // },
+        // {
+        //   $facet: {
+        //     metadata: [
+        //       { $count: "total" },
+        //       {
+        //         $addFields: {
+        //           page: +page,
+        //           maxPage: {
+        //             $ceil: {
+        //               $divide: ["$total", +limit],
+        //             },
+        //           },
+        //         },
+        //       },
+        //     ],
+        //     data: [{ $skip: (+page - 1) * +limit }, { $limit: +limit }],
+        //   },
+        // },
       ];
       const data = await this.orderModel.aggregate(aggregatePipeline);
       return {
@@ -120,6 +133,11 @@ export class OrdersService extends CrudService {
   async getASpecificOrderById(userId: any, id: any) {
     try {
       const data = await this.orderModel.findOne({ _id: new ObjectId(id) });
+      return {
+        message: "Aspecific order",
+        status: true,
+        data,
+      };
     } catch (error) {
       throw new CustomHttpException(error.message);
     }

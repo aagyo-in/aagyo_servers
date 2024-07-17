@@ -41,6 +41,13 @@ class Product {
   })
   productId: mongoose.Schema.Types.ObjectId;
 
+  @Prop({
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "products",
+    required: true,
+  })
+  varientId: mongoose.Schema.Types.ObjectId;
+
   @Prop({ type: Number, default: 1 })
   productQuantity: number;
 }
@@ -75,8 +82,8 @@ export class Order {
   @Prop({ required: false })
   partnerTip: Number;
 
-  @Prop({ required: false, enum: DELIVERY_INSTRUCTION })
-  deliveryInstruction: DELIVERY_INSTRUCTION;
+  @Prop({ required: false })
+  deliveryInstruction: string[];
 
   @Prop({ default: "20 mins" })
   preprationTime: String;

@@ -25,12 +25,12 @@ export class RatingController {
     return this.ratingService.CreateRatingOfProduct(sub, createRatingDto);
   }
 
-  @ApiOperation({ summary: "Rating by User" })
+  @ApiOperation({ summary: "Product's Rating" })
   @ApiParam({ name: "productID", type: String, required: true })
   @Post("get-rating/:productID")
   getRatingOfProductByID(
     @Req() { user: { sub } }: any,
-    @Param("productID") productID: string
+    @Param("productID") productID: any
   ) {
     return this.ratingService.getRatingOfProductByID(sub, productID);
   }

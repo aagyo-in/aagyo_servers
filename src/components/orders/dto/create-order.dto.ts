@@ -17,6 +17,11 @@ class PRODUCT {
   productId?: string;
 
   @ApiProperty()
+  @IsNotEmpty()
+  @IsString()
+  varientId?: string;
+
+  @ApiProperty()
   @IsNumber()
   productQuantity?: number;
 }

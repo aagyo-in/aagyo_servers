@@ -9,8 +9,8 @@ export class Rating {
   @Prop({ type: Number })
   rating: Number = 0;
 
-  @Prop({ type: String })
-  description: string;
+  @Prop({ type: [String] })
+  description: string[];
 
   @Prop({
     ref: "products",
