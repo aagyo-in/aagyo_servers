@@ -122,9 +122,9 @@ export class OrdersService extends CrudService {
         },
         {
           $project: {
+            createdAt: 1,
             handlingCharge: 1,
             deliveryCharge: 1,
-            totalPrice: 1,
             partnerTip: 1,
             paymentType: 1,
             orderStatus: 1,
@@ -145,14 +145,44 @@ export class OrdersService extends CrudService {
         {
           $group: {
             _id: "$_id", // Group by _id or any other unique identifier
+
+            itemTotal: {
+              $sum: {
+                $multiply: ["$product.price", "$product.productQuantity"],
+              },
+            },
             handlingCharge: { $first: "$handlingCharge" },
             deliveryCharge: { $first: "$deliveryCharge" },
-            totalPrice: { $first: "$totalPrice" },
             partnerTip: { $first: "$partnerTip" },
             paymentType: { $first: "$paymentType" },
             orderStatus: { $first: "$orderStatus" },
             orderType: { $first: "$orderType" },
+            createdAt: { $first: "$createdAt" },
             products: { $push: "$product" }, // Push products into an array
+          },
+        },
+        {
+          $project: {
+            charges: {
+              itemTotal: "$itemTotal",
+              handlingCharge: "$handlingCharge",
+              deliveryCharge: "$deliveryCharge",
+              partnerTip: "$partnerTip",
+              grandTotal: {
+                $add: [
+                  "$handlingCharge",
+                  "$itemTotal",
+                  "$deliveryCharge",
+                  "$partnerTip",
+                ],
+              },
+            },
+
+            products: 1,
+            createdAt: 1,
+            orderType: 1,
+            orderStatus: 1,
+            paymentType: 1,
           },
         },
         {

@@ -46,22 +46,27 @@ export class CartController {
 
   @ApiOperation({ summary: "Delete Item from Cart" })
   @HttpCode(HttpStatus.OK)
-  @ApiParam({ name: "id", type: String })
-  @Delete("delete/:id")
-  deleteFromCart(@Req() { user: { sub } }: any, @Param("id") id: any) {
-    return this.cartService.deleteFromCart(sub, id);
+  @ApiParam({ name: "varientId", type: String })
+  @Delete("delete/:varientId")
+  deleteFromCart(
+    @Req() { user: { sub } }: any,
+    @Param("varientId")
+    varientId: any
+  ) {
+    return this.cartService.deleteFromCart(sub, varientId);
   }
 
   @ApiOperation({ summary: "Update Item from Cart" })
   @HttpCode(HttpStatus.CREATED)
-  @ApiParam({ name: "id", type: String })
+  @ApiParam({ name: "varientId", type: String })
   @ApiBody({ type: UpdateCartDTO })
-  @Patch("update/:id")
+  @Patch("update/:varientId")
   updateCartItem(
     @Req() { user: { sub } }: any,
-    @Param("id") id: any,
+    @Param("varientId")
+    varientId: any,
     @Body() updateCartDTO: UpdateCartDTO
   ) {
-    return this.cartService.updateCartItem(sub, id, updateCartDTO);
+    return this.cartService.updateCartItem(sub, varientId, updateCartDTO);
   }
 }

@@ -111,9 +111,11 @@ export class CartService {
     }
   }
 
-  async deleteFromCart(userId: any, id: any) {
+  async deleteFromCart(userId: any, varientId: any) {
     try {
-      await this.cartModel.deleteOne({ _id: new ObjectId(id) });
+      await this.cartModel.deleteOne({
+        varientId: new ObjectId(varientId),
+      });
       return {
         message: "Delete Product from  Cart!",
         status: true,
@@ -124,12 +126,18 @@ export class CartService {
     }
   }
 
-  async updateCartItem(userId: any, id: any, updateCartDTO: UpdateCartDTO) {
+  async updateCartItem(
+    userId: any,
+    varientId: any,
+    updateCartDTO: UpdateCartDTO
+  ) {
     try {
       const { quantity } = updateCartDTO;
 
       await this.cartModel.findOneAndUpdate(
-        { _id: new ObjectId(id) },
+        {
+          varientId: new ObjectId(varientId),
+        },
         {
           $set: { quantity },
         }

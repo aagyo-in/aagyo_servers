@@ -3,6 +3,7 @@ import { ApiOperation, ApiTags } from "@nestjs/swagger";
 import { UserService } from "../service/user.service";
 import { MerchantLoginDTO } from "../dto/merchantLogin.dto";
 import { VerifyOTPDTO } from "../dto/verifyOTP.dto";
+import { userProfileDTO } from "../dto/user/user-profile.dto";
 
 @ApiTags("Authantication User")
 @Controller("user")
@@ -15,6 +16,14 @@ export class UserController {
     @Body() userLoginDto: MerchantLoginDTO
   ): Promise<{ message: string }> {
     return this.userService.signInAccountByPhone(userLoginDto);
+  }
+
+  @Post("/user-profile")
+  @ApiOperation({ summary: "Saved User's Detail " })
+  savedUserProfile(
+    @Body() userProfileDTO: userProfileDTO
+  ): Promise<{ message: string }> {
+    return this.userService.savedUserProfile(userProfileDTO);
   }
 
   @Post("/verifyOTP")

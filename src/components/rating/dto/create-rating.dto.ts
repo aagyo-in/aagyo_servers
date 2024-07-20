@@ -46,6 +46,11 @@ export class CreateRatingDto {
   @IsOptional()
   description: [string];
 
+  @ApiProperty()
+  @IsString()
+  @IsOptional()
+  review: string;
+
   @ApiProperty({ type: [ProductRating] })
   products: ProductRating[];
 }

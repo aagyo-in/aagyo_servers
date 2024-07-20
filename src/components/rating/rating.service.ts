@@ -18,13 +18,14 @@ export class RatingService {
     createRatingDto: CreateRatingDto
   ) {
     try {
-      const { deliveryBoyId, products } = createRatingDto;
+      const { deliveryBoyId, products, review } = createRatingDto;
       const ratings = products?.map(({ productId, rating, description }) => {
         return {
           userId,
           productId,
           rating,
           description,
+          review,
         };
       });
 
