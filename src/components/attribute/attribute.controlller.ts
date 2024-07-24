@@ -15,7 +15,6 @@ import { AttributeService } from "./attribute.service";
 import { CreateAttributeDTO } from "./dto/create-attribute.dto";
 import { ApiTags } from "@nestjs/swagger";
 import { AuthGuard } from "src/guards/auth.guards";
-import { ObjectId } from "mongodb";
 
 @UseGuards(AuthGuard)
 @ApiTags("Attributes")

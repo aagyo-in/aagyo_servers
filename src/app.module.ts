@@ -23,6 +23,7 @@ import { WalletModule } from "./components/wallet/wallet.module";
 import { UserModule } from './components/user/user.module';
 import { RatingModule } from './components/rating/rating.module';
 import { CartModule } from './components/cart/cart.module';
+import { BannersModule } from './components/banners/banners.module';
 
 @Module({
   imports: [
@@ -53,6 +54,7 @@ import { CartModule } from './components/cart/cart.module';
     UserModule,
     RatingModule,
     CartModule,
+    BannersModule,
   ],
   controllers: [AppController],
   providers: [AppService],
