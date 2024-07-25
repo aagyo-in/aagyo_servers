@@ -8,10 +8,10 @@ import {
   HttpStatus,
   Req,
   Param,
-  Query,
+  Patch,
 } from "@nestjs/common";
 import { BannersService } from "./banners.service";
-import { AddBannerDto } from "./dto/add-banner.dto";
+import { AddSponsoredBannerDto } from "./dto/add-sponsoredBanner.dto";
 import { AuthGuard } from "src/guards/auth.guards";
 import {
   ApiBearerAuth,
@@ -20,6 +20,8 @@ import {
   ApiParam,
   ApiTags,
 } from "@nestjs/swagger";
+import { InStoreBannerDTO } from "./dto/add-InStoreBanner.dto";
+import { UpdateBannerDto } from "./dto/update-banner.dto";
 
 @ApiBearerAuth()
 @UseGuards(AuthGuard)
@@ -28,26 +30,59 @@ import {
 export class BannersController {
   constructor(private readonly bannersService: BannersService) {}
 
-  @ApiOperation({ summary: "Add Banner" })
-  @ApiBody({ type: AddBannerDto })
+  @ApiOperation({ summary: "Add Sponsored Banner" })
+  @ApiBody({ type: AddSponsoredBannerDto })
   @HttpCode(HttpStatus.CREATED)
-  @Post("add")
-  addBanner(@Body() addBannerDto: AddBannerDto, @Req() { user: { sub } }: any) {
-    return this.bannersService.addBanner(addBannerDto, sub);
+  @Post("add-sponsor")
+  addSponsoredBanner(
+    @Body() addBannerDto: AddSponsoredBannerDto,
+    @Req() { user: { sub } }: any
+  ) {
+    return this.bannersService.addSponsoredBanner(addBannerDto, sub);
   }
 
-  @ApiOperation({ summary: "Get All Banners of a specific user" })
+  @ApiOperation({ summary: "Add In Store Banner" })
+  @ApiBody({ type: InStoreBannerDTO })
+  @HttpCode(HttpStatus.CREATED)
+  @Post("add-inStore")
+  addInStoreBanner(
+    @Body() inStoreBannerDTO: InStoreBannerDTO,
+    @Req() { user: { sub } }: any
+  ) {
+    return this.bannersService.addInStoreBanner(inStoreBannerDTO, sub);
+  }
+
+  @ApiOperation({ summary: "Get All Sponsor Banners of a specific Store" })
   @HttpCode(HttpStatus.OK)
-  @Get("")
-  getBanners(@Req() { user: { sub } }: any) {
-    return this.bannersService.getBanners(sub);
+  @Get("get-sponsor")
+  getSponsorBanners(@Req() { user: { sub } }: any) {
+    return this.bannersService.getSponsorBanners(sub);
+  }
+
+  @ApiOperation({ summary: "Get All In Store Banners of a specific Store" })
+  @HttpCode(HttpStatus.OK)
+  @Get("get-inStore")
+  getInStore(@Req() { user: { sub } }: any) {
+    return this.bannersService.getInStore(sub);
   }
 
   @ApiOperation({ summary: "Get All Sponsored Banners from all stores" })
   @HttpCode(HttpStatus.OK)
-  @Get("/get-allStores")
+  @Get("/get-banner-allStores")
   getAllBannersFromAllStores(@Req() { user: { sub } }: any) {
     return this.bannersService.getAllBannersFromAllStores(sub);
+  }
+
+  @ApiOperation({ summary: "Update Sponsored Banners." })
+  @HttpCode(HttpStatus.OK)
+  @ApiParam({ name: "id", type: String })
+  @Patch("/update-sponsorBanner/:id")
+  updateSponsorBanner(
+    @Req() { user: { sub } }: any,
+    @Body() updateBannerDto: UpdateBannerDto,
+    @Param("id") id: any
+  ) {
+    return this.bannersService.updateSponsorBanner(id, updateBannerDto);
   }
 
   @ApiOperation({ summary: "Delete a specific banner!" })

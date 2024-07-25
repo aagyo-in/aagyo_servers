@@ -14,7 +14,12 @@ class Slot {
 }
 @Schema({ timestamps: true })
 export class Store {
-  @Prop({ type: mongoose.Schema.Types.ObjectId, ref: "Merchant", unique: true ,required:true})
+  @Prop({
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "Merchant",
+    unique: true,
+    required: true,
+  })
   merchant_id: mongoose.Schema.Types.ObjectId;
 
   @Prop({ required: false })
@@ -34,6 +39,15 @@ export class Store {
 
   @Prop({ required: false })
   address: string;
+
+  @Prop({ required: false })
+  pinCode: string;
+
+  @Prop({ required: false })
+  latitude: string;
+
+  @Prop({ required: false })
+  longitude: string;
 
   @Prop({ type: Object, required: false })
   banner: Object;

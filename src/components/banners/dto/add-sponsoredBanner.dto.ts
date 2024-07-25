@@ -2,6 +2,7 @@ import { ApiProperty } from "@nestjs/swagger";
 import { Type } from "class-transformer";
 import {
   IsBoolean,
+  IsDateString,
   IsNotEmpty,
   IsString,
   ValidateNested,
@@ -19,19 +20,25 @@ class File {
   filePath: string;
 }
 
-export class AddBannerDto {
-  @ApiProperty()
-  @IsBoolean()
-  @IsNotEmpty()
-  isSponsor: boolean;
-
-  @ApiProperty()
-  @IsBoolean()
-  @IsNotEmpty()
-  isInStore: boolean;
-
+export class AddSponsoredBannerDto {
   @ApiProperty({ type: [File] })
   @ValidateNested({ each: true })
   @Type(() => File)
   files: File[];
+
+  @ApiProperty()
+  @IsString()
+  categoryId: string;
+
+  @ApiProperty()
+  @IsString()
+  productId: string;
+
+  @ApiProperty()
+  @IsDateString()
+  timeFrom: Date;
+
+  @ApiProperty()
+  @IsDateString()
+  timeTo: Date;
 }

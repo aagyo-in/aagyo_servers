@@ -12,6 +12,21 @@ export class RegisterStoreDetailDTO {
   @IsString()
   storeName: string;
 
+  @ApiProperty()
+  @IsNotEmpty()
+  @IsString()
+  pinCode: string;
+
+  @ApiProperty()
+  @IsNotEmpty()
+  @IsString()
+  latitude: string;
+
+  @ApiProperty()
+  @IsNotEmpty()
+  @IsString()
+  longitude: string;
+
   @ApiProperty({ type: [String], description: "Array of category names" })
   @IsArray()
   @IsString({ each: true })

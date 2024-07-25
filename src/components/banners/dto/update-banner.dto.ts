@@ -1,4 +1,4 @@
 import { PartialType } from "@nestjs/swagger";
-import { AddBannerDto } from "./add-banner.dto";
+import { AddSponsoredBannerDto } from "./add-sponsoredBanner.dto";
 
-export class UpdateBannerDto extends PartialType(AddBannerDto) {}
+export class UpdateBannerDto extends PartialType(AddSponsoredBannerDto) {}

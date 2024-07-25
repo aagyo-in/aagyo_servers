@@ -20,6 +20,7 @@ import { RATING_MODEL, RatingSchema } from "./rating";
 import { CART_MODEL, CartSchema } from "./cart";
 import { USER_MODEL, UserSchema } from "./user";
 import { BANNER_MODEL, BannerSchema } from "./banner";
+import { OFFER_MODEL, OfferSchema } from "./offer";
 
 const MODELS = [
   { name: ADMIN_MODEL, schema: AdminSchema },
@@ -42,6 +43,7 @@ const MODELS = [
   { name: CART_MODEL, schema: CartSchema },
   { name: USER_MODEL, schema: UserSchema },
   { name: BANNER_MODEL, schema: BannerSchema },
+  { name: OFFER_MODEL, schema: OfferSchema },
 ];
 
 @Global()

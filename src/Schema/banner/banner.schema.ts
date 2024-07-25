@@ -6,6 +6,18 @@ export class Banner {
   @Prop({ type: mongoose.Schema.Types.ObjectId, ref: "stores", required: true })
   storeId: mongoose.Schema.Types.ObjectId;
 
+  @Prop({ type: mongoose.Schema.Types.ObjectId, ref: "categories" })
+  categoryId: mongoose.Schema.Types.ObjectId;
+
+  @Prop({ type: mongoose.Schema.Types.ObjectId, ref: "products" })
+  productId: mongoose.Schema.Types.ObjectId;
+
+  @Prop({ type: Date })
+  timeFrom: Date;
+
+  @Prop({ type: Date })
+  timeTo: Date;
+
   @Prop({ type: Array })
   files: [
     {
@@ -15,10 +27,10 @@ export class Banner {
   ];
 
   @Prop({ type: Boolean })
-  isSponsor: boolean = true;
+  isSponsor: boolean = false;
 
   @Prop({ type: Boolean })
-  isInStore: boolean;
+  isInStore: boolean = false;
 }
 
 export type BannerDocument = Banner & Document;

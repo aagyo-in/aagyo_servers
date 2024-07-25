@@ -192,8 +192,18 @@ export class MerchantService extends CrudService {
     banner: Express.Multer.File
   ) {
     try {
-      const { id, address, category, city, country, storeName, state } =
-        registerStoreDetailDTO;
+      const {
+        id,
+        address,
+        category,
+        city,
+        country,
+        storeName,
+        state,
+        latitude,
+        longitude,
+        pinCode,
+      } = registerStoreDetailDTO;
       const uploadFile = await this.s3Service.uploadFile(banner);
       const result = await this.storeModel.create({
         merchant_id: new ObjectId(id),
@@ -202,6 +212,9 @@ export class MerchantService extends CrudService {
         country,
         state,
         city,
+        pinCode,
+        latitude,
+        longitude,
         banner: uploadFile,
         address,
       });

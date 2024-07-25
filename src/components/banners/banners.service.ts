@@ -1,10 +1,12 @@
 import { Injectable } from "@nestjs/common";
-import { AddBannerDto } from "./dto/add-banner.dto";
+import { AddSponsoredBannerDto } from "./dto/add-sponsoredBanner.dto";
 import { CustomHttpException } from "src/exception/custom-http.exception";
 import { InjectModel } from "@nestjs/mongoose";
 import { BANNER_MODEL, BannerDocument } from "src/Schema/banner";
 import { Model } from "mongoose";
 import { ObjectId } from "mongodb";
+import { InStoreBannerDTO } from "./dto/add-InStoreBanner.dto";
+import { UpdateBannerDto } from "./dto/update-banner.dto";
 
 @Injectable()
 export class BannersService {
@@ -13,9 +15,18 @@ export class BannersService {
     private readonly bannerModel: Model<BannerDocument>
   ) {}
 
-  async addBanner(addBannerDto: AddBannerDto, storeId: any) {
+  async addSponsoredBanner(addBannerDto: AddSponsoredBannerDto, storeId: any) {
     try {
-      await this.bannerModel.create({ storeId, ...addBannerDto });
+      const { categoryId, files, productId, timeFrom, timeTo } = addBannerDto;
+      await this.bannerModel.create({
+        storeId: new ObjectId(storeId),
+        categoryId: new ObjectId(categoryId),
+        productId: new ObjectId(productId),
+        timeFrom: timeFrom,
+        timeTo: timeTo,
+        files,
+        isSponsor: true,
+      });
       return {
         message: "Add Bannner Successfully!",
         status: true,
@@ -26,18 +37,92 @@ export class BannersService {
     }
   }
 
-  async getBanners(userId: any) {
+  async addInStoreBanner(inStoreBannerDTO: InStoreBannerDTO, storeId: any) {
+    try {
+      const { files } = inStoreBannerDTO;
+      await this.bannerModel.create({
+        storeId: new ObjectId(storeId),
+        files,
+        isInStore: true,
+      });
+      return {
+        message: "Add Bannner Successfully!",
+        status: true,
+        data: [],
+      };
+    } catch (error) {
+      throw new CustomHttpException(error.message);
+    }
+  }
+
+  async getSponsorBanners(userId: any) {
     try {
       const aggregatePipeline: any = [
         {
           $match: {
-            storeId: new ObjectId(userId),
+            $and: [{ storeId: new ObjectId(userId) }, { isSponsor: true }],
+          },
+        },
+        {
+          $lookup: {
+            from: "products",
+            localField: "productId",
+            foreignField: "_id",
+            as: "Product",
+          },
+        },
+        {
+          $unwind: "$Product",
+        },
+        {
+          $lookup: {
+            from: "categories",
+            localField: "categoryId",
+            foreignField: "_id",
+            as: "Category",
+          },
+        },
+        {
+          $unwind: "$Category",
+        },
+        {
+          $project: {
+            timeFrom: 1,
+            timeTo: 1,
+            files: 1,
+            createdAt: 1,
+            Product: 1,
+            Category: {
+              name: 1,
+              banner: 1,
+              status: 1,
+            },
           },
         },
       ];
       const data = await this.bannerModel.aggregate(aggregatePipeline);
       return {
-        message: "All Bannners of a specific user!",
+        message: "All Sponsor Bannners of a specific Store!",
+        status: true,
+        data,
+      };
+    } catch (error) {
+      throw new CustomHttpException(error.message);
+    }
+  }
+
+  async getInStore(userId: any) {
+    try {
+      const aggregatePipeline: any = [
+        {
+          $match: {
+            $and: [{ storeId: new ObjectId(userId) }, { isInStore: true }],
+          },
+        },
+      ];
+      const data = await this.bannerModel.aggregate(aggregatePipeline);
+      return {
+        message: "All In Store Bannners of a specific Store!",
         status: true,
         data,
       };
@@ -53,10 +138,46 @@ export class BannersService {
             isSponsor: true,
           },
         },
+        {
+          $lookup: {
+            from: "products",
+            localField: "productId",
+            foreignField: "_id",
+            as: "Product",
+          },
+        },
+        {
+          $unwind: "$Product",
+        },
+        {
+          $lookup: {
+            from: "categories",
+            localField: "categoryId",
+            foreignField: "_id",
+            as: "Category",
+          },
+        },
+        {
+          $unwind: "$Category",
+        },
+        {
+          $project: {
+            timeFrom: 1,
+            timeTo: 1,
+            files: 1,
+            createdAt: 1,
+            Product: 1,
+            Category: {
+              name: 1,
+              banner: 1,
+              status: 1,
+            },
+          },
+        },
       ];
       const data = await this.bannerModel.aggregate(aggregatePipeline);
       return {
-        message: "All Bannners of a specific user!",
+        message: "All Sponsored Bannners.",
         status: true,
         data,
       };
@@ -65,6 +186,25 @@ export class BannersService {
     }
   }
 
+  async updateSponsorBanner(id: any, updateBannerDto: UpdateBannerDto) {
+    try {
+      await this.bannerModel.findByIdAndUpdate(
+        { _id: new ObjectId(id) },
+        {
+          $set: {
+            ...updateBannerDto,
+          },
+        }
+      );
+      return {
+        message: "Banner Delete Sucessfully!",
+        status: true,
+        data: [],
+      };
+    } catch (error) {
+      throw new CustomHttpException(error.message);
+    }
+  }
   async deleteBanner(bannerId: any) {
     try {
       await this.bannerModel.findByIdAndDelete({
