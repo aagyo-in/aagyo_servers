@@ -309,19 +309,48 @@ export class MerchantService extends CrudService {
         mobile,
         name,
       } = egisterBankDetailDTO;
-      const result = await this.bankDetailModel.create({
+
+      const isExist = await this.bankDetailModel.findOne({
         merchant_id: new ObjectId(id),
-        accountNumber,
-        accountType,
-        accountHolderName,
-        name,
-        email,
-        mobile,
       });
-      return {
-        status: "SUCCESS",
-        message: "Bank Details Saved Successfully!",
-      };
+
+      if (!isExist) {
+        await this.bankDetailModel.create({
+          merchant_id: new ObjectId(id),
+          accountNumber,
+          accountType,
+          accountHolderName,
+          name,
+          email,
+          mobile,
+        });
+        return {
+          status: "SUCCESS",
+          message: "Bank Details Saved Successfully!",
+        };
+      } else {
+        await this.bankDetailModel.findByIdAndUpdate(
+          { _id: isExist?._id },
+          {
+            $set: {
+              merchant_id: new ObjectId(id),
+              accountNumber,
+              accountType,
+              accountHolderName,
+              name,
+              email,
+              mobile,
+            },
+          },
+          {
+            upsert: true,
+          }
+        );
+        return {
+          status: "SUCCESS",
+          message: "Bank Details Updated Successfully!",
+        };
+      }
     } catch (err) {
       throw err;
     }
