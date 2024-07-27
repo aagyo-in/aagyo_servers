@@ -208,31 +208,56 @@ export class MerchantService extends CrudService {
         pinCode,
       } = registerStoreDetailDTO;
       const uploadFile = await this.s3Service.uploadFile(banner);
-
-      await this.storeModel.findByIdAndUpdate(
-        {
+      const isExist = await this.storeModel.findOne({
+        merchant_id: new ObjectId(id),
+      });
+      if (!isExist) {
+        await this.storeModel.create({
           merchant_id: new ObjectId(id),
-        },
-        {
-          $set: {
-            storeName,
-            category: category && category?.map((item) => new ObjectId(item)),
-            country,
-            state,
-            city,
-            pinCode,
-            latitude,
-            longitude,
-            banner: uploadFile,
-            address,
+          storeName,
+          category: category && category?.map((item) => new ObjectId(item)),
+          country,
+          state,
+          city,
+          pinCode,
+          latitude,
+          longitude,
+          banner: uploadFile,
+          address,
+        });
+
+        return {
+          status: "SUCCESS",
+          message: "Store Details Saved Successfully!",
+        };
+      } else {
+        const { _id } = isExist;
+        await this.storeModel.findByIdAndUpdate(
+          {
+            _id: _id,
           },
-        },
-        { upsert: true }
-      );
-      return {
-        status: "SUCCESS",
-        message: "Store Details Saved Successfully!",
-      };
+          {
+            $set: {
+              merchant_id: new ObjectId(id),
+              storeName,
+              category: category && category?.map((item) => new ObjectId(item)),
+              country,
+              state,
+              city,
+              pinCode,
+              latitude,
+              longitude,
+              banner: uploadFile,
+              address,
+            },
+          },
+          { upsert: true, new: true }
+        );
+        return {
+          status: "SUCCESS",
+          message: "Store Details Updated Successfully!",
+        };
+      }
     } catch (error) {
       console.log(" error when save store detail", error);
       if (
