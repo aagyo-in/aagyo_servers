@@ -1,44 +1,31 @@
 import { ApiProperty } from "@nestjs/swagger";
 import {
-  IsArray,
   IsDateString,
+  IsEnum,
   IsNotEmpty,
   IsNumber,
   IsString,
 } from "class-validator";
 
-class File {
-  @ApiProperty()
-  @IsString()
-  @IsNotEmpty()
-  fileName?: string;
-
-  @ApiProperty()
-  @IsNotEmpty()
-  @IsString()
-  filePath: string;
+enum DISCOUNTAPPLICABLEFOR {
+  ALL_USER = "ALL_USER",
+  NEW_USER = "NEW_USER",
 }
+
+enum SELECTMEALTIME {
+  ALL = "ALL",
+  BREAKFAST = "BREAKFAST",
+  LUNCH = "LUNCH",
+  DINNER = "DINNER",
+}
+
+enum PAYMENTMETHOD {
+  BOTH = "BOTH",
+  ONLINE = "ONLINE",
+  METHOD = "METHOD",
+}
+
 export class CreateOfferDto {
-  @ApiProperty()
-  @IsString()
-  @IsNotEmpty()
-  readonly couponType: string;
-
-  @ApiProperty()
-  @IsNotEmpty()
-  @IsString()
-  readonly couponName: string;
-
-  @ApiProperty()
-  @IsNotEmpty()
-  @IsString()
-  readonly couponCode: string;
-
-  @ApiProperty()
-  @IsString()
-  @IsNotEmpty()
-  readonly discountType: string;
-
   @ApiProperty()
   @IsNumber()
   @IsNotEmpty()
@@ -56,6 +43,17 @@ export class CreateOfferDto {
   @IsNumber()
   readonly usagePerCustomer: number;
 
+  @ApiProperty({ type: DISCOUNTAPPLICABLEFOR, enum: DISCOUNTAPPLICABLEFOR })
+  @IsString()
+  @IsEnum({ type: DISCOUNTAPPLICABLEFOR })
+  readonly discountApplicablreFor: DISCOUNTAPPLICABLEFOR =
+    DISCOUNTAPPLICABLEFOR.ALL_USER;
+
+  @ApiProperty({ type: SELECTMEALTIME, enum: SELECTMEALTIME })
+  @IsString()
+  @IsEnum({ type: SELECTMEALTIME })
+  readonly selectMealTime: SELECTMEALTIME = SELECTMEALTIME.ALL;
+
   @ApiProperty()
   @IsDateString()
   @IsNotEmpty()
@@ -66,19 +64,8 @@ export class CreateOfferDto {
   @IsNotEmpty()
   readonly dateTo: Date;
 
-  @ApiProperty()
+  @ApiProperty({ type: PAYMENTMETHOD, enum: PAYMENTMETHOD })
   @IsString()
-  readonly paymentMethod: string;
-
-  @ApiProperty()
-  @IsString()
-  readonly termsCondition: string;
-
-  @ApiProperty()
-  @IsString()
-  readonly description: string;
-
-  @ApiProperty({ type: [File] })
-  @IsArray()
-  readonly files: File[];
+  @IsEnum({ type: PAYMENTMETHOD })
+  readonly paymentMethod: PAYMENTMETHOD = PAYMENTMETHOD.BOTH;
 }
