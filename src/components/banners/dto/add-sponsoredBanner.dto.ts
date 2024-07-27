@@ -1,10 +1,12 @@
 import { ApiProperty } from "@nestjs/swagger";
 import { Type } from "class-transformer";
 import {
+  IsArray,
   IsBoolean,
   IsDateString,
   IsNotEmpty,
   IsString,
+  MinLength,
   ValidateNested,
 } from "class-validator";
 
@@ -23,6 +25,8 @@ class File {
 export class AddSponsoredBannerDto {
   @ApiProperty({ type: [File] })
   @ValidateNested({ each: true })
+  @IsArray({})
+  @MinLength(1)
   @Type(() => File)
   files: File[];
 

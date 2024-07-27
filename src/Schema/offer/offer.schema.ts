@@ -9,18 +9,6 @@ export class Offer {
   readonly storeId: mongoose.Schema.Types.ObjectId;
 
   @Prop({ required: true })
-  readonly couponType: String;
-
-  @Prop({ required: true })
-  readonly couponName: String;
-
-  @Prop({ required: true })
-  readonly couponCode: String;
-
-  @Prop({ required: true })
-  readonly discountType: String;
-
-  @Prop({ required: true })
   readonly discount: Number;
 
   @Prop()
@@ -31,6 +19,12 @@ export class Offer {
 
   @Prop()
   readonly usagePerCustomer: Number;
+
+  @Prop()
+  readonly discountApplicablreFor: String;
+
+  @Prop()
+  readonly selectMealTime: String;
 
   @Prop({ type: Date })
   @IsDate()
@@ -44,20 +38,6 @@ export class Offer {
 
   @Prop()
   readonly paymentMethod: String;
-
-  @Prop()
-  readonly termsCondition: String;
-
-  @Prop()
-  readonly description: String;
-
-  @Prop()
-  readonly files: [
-    {
-      fileName: String;
-      filePath: String;
-    },
-  ];
 }
 
 export type OfferDocument = Offer & Document;

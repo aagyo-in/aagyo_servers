@@ -176,6 +176,9 @@ export class MerchantService extends CrudService {
             name,
             email,
           },
+        },
+        {
+          upsert: true,
         }
       );
       return {
@@ -205,19 +208,27 @@ export class MerchantService extends CrudService {
         pinCode,
       } = registerStoreDetailDTO;
       const uploadFile = await this.s3Service.uploadFile(banner);
-      const result = await this.storeModel.create({
-        merchant_id: new ObjectId(id),
-        storeName,
-        category: category && category?.map((item) => new ObjectId(item)),
-        country,
-        state,
-        city,
-        pinCode,
-        latitude,
-        longitude,
-        banner: uploadFile,
-        address,
-      });
+
+      await this.storeModel.findByIdAndUpdate(
+        {
+          merchant_id: new ObjectId(id),
+        },
+        {
+          $set: {
+            storeName,
+            category: category && category?.map((item) => new ObjectId(item)),
+            country,
+            state,
+            city,
+            pinCode,
+            latitude,
+            longitude,
+            banner: uploadFile,
+            address,
+          },
+        },
+        { upsert: true }
+      );
       return {
         status: "SUCCESS",
         message: "Store Details Saved Successfully!",
@@ -249,7 +260,8 @@ export class MerchantService extends CrudService {
             isFullTimeOpen,
             slots: [...slots],
           },
-        }
+        },
+        { upsert: true }
       );
       return {
         status: "SUCCESS",

@@ -72,8 +72,6 @@ export class MerchantController {
     @UploadedFile()
     storeImage: Express.Multer.File
   ) {
-    console.log("storeImage", storeImage);
-    console.log("storedata", registerStoreDetailDTO);
     return this.merchantService.registerStoreDetail(
       registerStoreDetailDTO,
       storeImage
@@ -114,6 +112,7 @@ export class MerchantController {
   ) {
     return this.merchantService.registerDocuments(registerDocumentDTO, files);
   }
+
   @HttpCode(HttpStatus.OK)
   @Get("step/:id")
   @ApiOperation({ summary: "Get current step by id" })
