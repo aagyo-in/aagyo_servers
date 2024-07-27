@@ -1,4 +1,5 @@
 import { ApiProperty } from "@nestjs/swagger";
+import { Transform } from "class-transformer";
 import { IsArray, IsNotEmpty, IsString } from "class-validator";
 import { ObjectId } from "mongodb";
 
@@ -27,7 +28,10 @@ export class RegisterStoreDetailDTO {
   @IsString()
   longitude: string;
 
-  @ApiProperty({ type: [String], description: "Array of category names" })
+  @ApiProperty({
+    type: [String],
+    description: "Array of category names",
+  })
   @IsArray()
   @IsString({ each: true })
   category: string[];
