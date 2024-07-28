@@ -31,6 +31,9 @@ export class Banner {
 
   @Prop({ type: Boolean })
   isInStore: boolean = false;
+
+  @Prop({ type: Boolean, default: true })
+  isActive: boolean = true;
 }
 
 export type BannerDocument = Banner & Document;

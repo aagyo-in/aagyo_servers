@@ -26,6 +26,7 @@ export class BannersService {
         timeTo: timeTo,
         files,
         isSponsor: true,
+        isActive: true,
       });
       return {
         message: "Add Bannner Successfully!",
@@ -44,6 +45,7 @@ export class BannersService {
         storeId: new ObjectId(storeId),
         files,
         isInStore: true,
+        isActive: true,
       });
       return {
         message: "Add Bannner Successfully!",
@@ -92,6 +94,7 @@ export class BannersService {
             files: 1,
             createdAt: 1,
             Product: 1,
+            isActive: 1,
             Category: {
               name: 1,
               banner: 1,
@@ -167,6 +170,7 @@ export class BannersService {
             files: 1,
             createdAt: 1,
             Product: 1,
+            isActive: true,
             Category: {
               name: 1,
               banner: 1,
@@ -212,6 +216,28 @@ export class BannersService {
       });
       return {
         message: "Banner Delete Sucessfully!",
+        status: true,
+        data: [],
+      };
+    } catch (error) {
+      throw new CustomHttpException(error.message);
+    }
+  }
+
+  async updateStatusOfBanner(bannerId: any, isActive: Boolean) {
+    try {
+      await this.bannerModel.findOneAndUpdate(
+        {
+          _id: new ObjectId(bannerId),
+        },
+        {
+          $set: {
+            isActive,
+          },
+        }
+      );
+      return {
+        message: "Banner Update Sucessfully!",
         status: true,
         data: [],
       };

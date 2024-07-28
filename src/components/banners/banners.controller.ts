@@ -9,6 +9,7 @@ import {
   Req,
   Param,
   Patch,
+  Query,
 } from "@nestjs/common";
 import { BannersService } from "./banners.service";
 import { AddSponsoredBannerDto } from "./dto/add-sponsoredBanner.dto";
@@ -18,6 +19,7 @@ import {
   ApiBody,
   ApiOperation,
   ApiParam,
+  ApiQuery,
   ApiTags,
 } from "@nestjs/swagger";
 import { InStoreBannerDTO } from "./dto/add-InStoreBanner.dto";
@@ -91,5 +93,17 @@ export class BannersController {
   @Get("delete/:id")
   deleteBanner(@Req() { user: { sub } }: any, @Param("id") id: any) {
     return this.bannersService.deleteBanner(id);
+  }
+
+  @ApiOperation({ summary: "Delete a specific banner!" })
+  @HttpCode(HttpStatus.OK)
+  @ApiParam({ name: "id", type: String })
+  @ApiQuery({ name: "isAtive", type: Boolean })
+  @Get("update-status/:id")
+  updateStatusOfBanner(
+    @Param("id") id: any,
+    @Query("isActive") isActive: Boolean
+  ) {
+    return this.bannersService.updateStatusOfBanner(id,isActive);
   }
 }

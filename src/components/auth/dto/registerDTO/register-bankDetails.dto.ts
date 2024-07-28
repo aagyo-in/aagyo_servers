@@ -36,6 +36,11 @@ export class RegisterBankDetailDTO {
 
   @ApiProperty()
   @IsNotEmpty()
+  @IsString()
+  ifsc: string;
+
+  @ApiProperty()
+  @IsNotEmpty()
   @IsEmail()
   email: string;
 

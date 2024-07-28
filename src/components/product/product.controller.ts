@@ -4,6 +4,7 @@ import {
   Get,
   HttpCode,
   HttpStatus,
+  Param,
   Post,
   Query,
   Req,
@@ -14,6 +15,7 @@ import {
   ApiBearerAuth,
   ApiBody,
   ApiOperation,
+  ApiParam,
   ApiQuery,
   ApiTags,
 } from "@nestjs/swagger";
@@ -22,6 +24,7 @@ import { GetProductDTO } from "./dto/get-product.dto";
 import { AuthGuard } from "src/guards/auth.guards";
 import { GetProductByCategory } from "./dto/get-productByCategory.dto";
 import { CustomHttpException } from "src/exception/custom-http.exception";
+import { UpdateProductDTO } from "./dto/update-product.dto";
 
 @UseGuards(AuthGuard)
 @ApiBearerAuth()
@@ -67,6 +70,51 @@ export class ProductController {
         getProductByCategory,
         sub
       );
+    } catch (error) {
+      throw new CustomHttpException(error.message);
+    }
+  }
+
+  @Get("update-status/:id")
+  @ApiQuery({ name: "isActive", type: Boolean })
+  @ApiParam({ name: "id", type: String, required: true })
+  @ApiOperation({ summary: "Update status of Products." })
+  @HttpCode(HttpStatus.OK)
+  updateStatus(
+    @Param("id") id: string,
+    @Query("isActive") isAvtive: boolean,
+    @Req() { user: { sub } }: any
+  ) {
+    try {
+      return this.productService.updateStatus(id, isAvtive);
+    } catch (error) {
+      throw new CustomHttpException(error.message);
+    }
+  }
+
+  @Get("get-product/:id")
+  @ApiParam({ name: "id", type: String, required: true })
+  @ApiOperation({ summary: "Get A Product By Id" })
+  @HttpCode(HttpStatus.OK)
+  getProductById(@Param("id") id: string, @Req() { user: { sub } }: any) {
+    try {
+      return this.productService.getProductById(id);
+    } catch (error) {
+      throw new CustomHttpException(error.message);
+    }
+  }
+
+  @Get("update-product/:id")
+  @ApiParam({ name: "id", type: String, required: true })
+  @ApiOperation({ summary: "Update A Product By Id" })
+  @HttpCode(HttpStatus.OK)
+  updateProductById(
+    @Param("id") id: string,
+    @Req() { user: { sub } }: any,
+    @Body() updateProductDTO: UpdateProductDTO
+  ) {
+    try {
+      return this.productService.updateProductById(id, updateProductDTO);
     } catch (error) {
       throw new CustomHttpException(error.message);
     }

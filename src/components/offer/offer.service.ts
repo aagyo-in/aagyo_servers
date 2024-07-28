@@ -90,4 +90,26 @@ export class OfferService {
       throw new CustomHttpException(error.message);
     }
   }
+
+  async updateStatusOfOffer(id: any, isActive: Boolean) {
+    try {
+      const data = await this.offerModel.findOneAndUpdate(
+        {
+          _id: new ObjectId(id),
+        },
+        {
+          $set: {
+            isActive,
+          },
+        }
+      );
+      return {
+        message: "Coupon Get Successfully!",
+        status: true,
+        data,
+      };
+    } catch (error) {
+      throw new CustomHttpException(error.message);
+    }
+  }
 }

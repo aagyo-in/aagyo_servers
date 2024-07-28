@@ -16,6 +16,9 @@ export class BankDetail {
   accountHolderName: string;
 
   @Prop({ required: true })
+  ifsc: string;
+
+  @Prop({ required: true })
   name: string;
 
   @Prop({ required: true, lowercase: true })

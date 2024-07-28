@@ -38,6 +38,9 @@ export class Offer {
 
   @Prop()
   readonly paymentMethod: String;
+
+  @Prop({ default: true })
+  readonly isActive: Boolean = true;
 }
 
 export type OfferDocument = Offer & Document;

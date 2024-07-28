@@ -9,6 +9,7 @@ import { S3Service } from "../s3/s3.service";
 import { GetProductDTO } from "./dto/get-product.dto";
 import { CustomHttpException } from "src/exception/custom-http.exception";
 import { GetProductByCategory } from "./dto/get-productByCategory.dto";
+import { UpdateProductDTO } from "./dto/update-product.dto";
 
 @Injectable()
 export class ProductService extends CrudService {
@@ -44,6 +45,7 @@ export class ProductService extends CrudService {
         tags,
         isOrganic,
         varients: varients,
+        isActive: true,
       });
       return {
         message: "Add Product Sucessfully!",
@@ -179,6 +181,82 @@ export class ProductService extends CrudService {
       };
     } catch (error) {
       throw new CustomHttpException(error.message);
+    }
+  }
+
+  async updateStatus(id: string, isActive: boolean) {
+    try {
+      await this.productModel.findOneAndUpdate(
+        {
+          _id: new ObjectId(id),
+        },
+        {
+          $set: {
+            isActive,
+          },
+        }
+      );
+      return {
+        status: true,
+        message: "Update Status of Product!",
+      };
+    } catch (error) {
+      throw new CustomHttpException(error.message);
+    }
+  }
+
+  async updateProductById(id: string, updateProductDTO: UpdateProductDTO) {
+    try {
+      await this.productModel.findOneAndUpdate(
+        {
+          _id: new ObjectId(id),
+        },
+        {
+          $set: {
+            ...updateProductDTO,
+          },
+        }
+      );
+      return {
+        status: true,
+        message: "Update Status of Product!",
+      };
+    } catch (error) {
+      throw new CustomHttpException(error.message);
+    }
+  }
+
+  async getProductById(id: string): Promise<any> {
+    try {
+      console.log(id);
+      const aggregationPipeline: any = [
+        {
+          $match: {
+            _id: new ObjectId(id),
+          },
+        },
+        {
+          $lookup: {
+            from: "categories",
+            localField: "categoryId",
+            foreignField: "_id",
+            as: "categoryDetail",
+          },
+        },
+        {
+          $unwind: "$categoryDetail",
+        },
+      ];
+
+      const result = await this.productModel.aggregate(aggregationPipeline);
+
+      return {
+        message: "Product List!",
+        status: "SUCCESS",
+        data: result[0],
+      };
+    } catch (err) {
+      throw new CustomHttpException(err.message);
     }
   }
 }

@@ -10,6 +10,7 @@ import {
   HttpCode,
   HttpStatus,
   Req,
+  Query,
 } from "@nestjs/common";
 import { OfferService } from "./offer.service";
 import { CreateOfferDto } from "./dto/create-offer.dto";
@@ -61,5 +62,15 @@ export class OfferController {
   @Get("delete:id")
   getById(@Param("id") id: string) {
     return this.offerService.getById(id);
+  }
+
+  @ApiOperation({ summary: "Update Status of offer" })
+  @HttpCode(HttpStatus.OK)
+  @Get("update-status/:id")
+  updateStatusOfOffer(
+    @Param("id") id: string,
+    @Query("IsActive") isActive: Boolean
+  ) {
+    return this.offerService.updateStatusOfOffer(id, isActive);
   }
 }

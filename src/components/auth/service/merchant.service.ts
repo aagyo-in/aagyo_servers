@@ -307,6 +307,7 @@ export class MerchantService extends CrudService {
         accountType,
         email,
         mobile,
+        ifsc,
         name,
       } = egisterBankDetailDTO;
 
@@ -322,6 +323,7 @@ export class MerchantService extends CrudService {
           accountHolderName,
           name,
           email,
+          ifsc,
           mobile,
         });
         return {
@@ -336,6 +338,7 @@ export class MerchantService extends CrudService {
               merchant_id: new ObjectId(id),
               accountNumber,
               accountType,
+              ifsc,
               accountHolderName,
               name,
               email,

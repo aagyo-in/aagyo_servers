@@ -57,6 +57,9 @@ export class Product {
 
   @Prop({ type: [Varients] })
   varients: Varients[];
+
+  @Prop({ type: Boolean, default: true })
+  isActive: boolean = true;
 }
 
 export type ProductDocument = Product & Document;
