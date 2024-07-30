@@ -43,15 +43,18 @@ export class CreateOfferDto {
   @IsNumber()
   readonly usagePerCustomer: number;
 
-  @ApiProperty({ type: DISCOUNTAPPLICABLEFOR, enum: DISCOUNTAPPLICABLEFOR })
+  @ApiProperty({
+    enumName: "Select Discount Applicable for Enum",
+    enum: DISCOUNTAPPLICABLEFOR,
+  })
   @IsString()
-  @IsEnum({ type: DISCOUNTAPPLICABLEFOR })
-  readonly discountApplicablreFor: DISCOUNTAPPLICABLEFOR =
+  @IsEnum(DISCOUNTAPPLICABLEFOR)
+  readonly discountApplicableFor: DISCOUNTAPPLICABLEFOR =
     DISCOUNTAPPLICABLEFOR.ALL_USER;
 
-  @ApiProperty({ type: SELECTMEALTIME, enum: SELECTMEALTIME })
+  @ApiProperty({ enum: SELECTMEALTIME, enumName: "Select Time Enum" })
   @IsString()
-  @IsEnum({ type: SELECTMEALTIME })
+  @IsEnum(SELECTMEALTIME)
   readonly selectMealTime: SELECTMEALTIME = SELECTMEALTIME.ALL;
 
   @ApiProperty()
@@ -64,8 +67,12 @@ export class CreateOfferDto {
   @IsNotEmpty()
   readonly dateTo: Date;
 
-  @ApiProperty({ type: PAYMENTMETHOD, enum: PAYMENTMETHOD })
+  @ApiProperty({
+    enumName: "Select Payment Method",
+    enum: PAYMENTMETHOD,
+    default: PAYMENTMETHOD.BOTH,
+  })
   @IsString()
-  @IsEnum({ type: PAYMENTMETHOD })
+  @IsEnum(PAYMENTMETHOD)
   readonly paymentMethod: PAYMENTMETHOD = PAYMENTMETHOD.BOTH;
 }

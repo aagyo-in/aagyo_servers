@@ -104,6 +104,6 @@ export class BannersController {
     @Param("id") id: any,
     @Query("isActive") isActive: Boolean
   ) {
-    return this.bannersService.updateStatusOfBanner(id,isActive);
+    return this.bannersService.updateStatusOfBanner(id, isActive);
   }
 }

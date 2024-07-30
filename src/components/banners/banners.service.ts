@@ -38,7 +38,7 @@ export class BannersService {
     }
   }
 
-  async addInStoreBanner(inStoreBannerDTO: InStoreBannerDTO, storeId: any) {
+  async addInStoreBanner(inStoreBannerDTO: InStoreBannerDTO, storeId: string) {
     try {
       const { files } = inStoreBannerDTO;
       await this.bannerModel.create({

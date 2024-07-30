@@ -21,7 +21,7 @@ export class Offer {
   readonly usagePerCustomer: Number;
 
   @Prop()
-  readonly discountApplicablreFor: String;
+  readonly discountApplicableFor: String;
 
   @Prop()
   readonly selectMealTime: String;

@@ -1,6 +1,7 @@
 import { ApiProperty } from "@nestjs/swagger";
 import { Type } from "class-transformer";
 import {
+  ArrayMinSize,
   IsArray,
   IsBoolean,
   IsDateString,
@@ -25,8 +26,7 @@ class File {
 export class AddSponsoredBannerDto {
   @ApiProperty({ type: [File] })
   @ValidateNested({ each: true })
-  @IsArray({})
-  @MinLength(1)
+  @ArrayMinSize(1)
   @Type(() => File)
   files: File[];
 
