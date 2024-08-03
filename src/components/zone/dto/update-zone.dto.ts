@@ -5,7 +5,7 @@ import { IsArray, IsNumber, IsString } from "class-validator";
 export class AdditionalDTO {
   @ApiProperty()
   @IsArray()
-  category: [string];
+  zoneCategory: [string];
 
   @ApiProperty()
   @IsArray()
