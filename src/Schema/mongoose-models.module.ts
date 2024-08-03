@@ -21,6 +21,7 @@ import { CART_MODEL, CartSchema } from "./cart";
 import { USER_MODEL, UserSchema } from "./user";
 import { BANNER_MODEL, BannerSchema } from "./banner";
 import { OFFER_MODEL, OfferSchema } from "./offer";
+import { ZONE_MODEL, ZoneSchema } from "./zone";
 
 const MODELS = [
   { name: ADMIN_MODEL, schema: AdminSchema },
@@ -44,6 +45,7 @@ const MODELS = [
   { name: USER_MODEL, schema: UserSchema },
   { name: BANNER_MODEL, schema: BannerSchema },
   { name: OFFER_MODEL, schema: OfferSchema },
+  { name: ZONE_MODEL, schema: ZoneSchema },
 ];
 
 @Global()
