@@ -99,8 +99,8 @@ export class ZoneService {
 
   async updateZone(id: string, updateZoneDto: UpdateZoneDto) {
     try {
-     
-      await this.zoneModel.findByIdAndUpdate(
+      console.log(updateZoneDto);
+      const result = await this.zoneModel.findByIdAndUpdate(
         {
           _id: new ObjectId(id),
         },
@@ -110,9 +110,9 @@ export class ZoneService {
           },
         }
       );
-
+      console.log(result);
       return {
-        message: "Zone Deleted Successfully",
+        message: "Zone Update Successfully",
         status: true,
         data: [],
       };

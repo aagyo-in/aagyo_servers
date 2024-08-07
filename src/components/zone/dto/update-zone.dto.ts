@@ -1,45 +1,94 @@
 import { ApiProperty, IntersectionType, PartialType } from "@nestjs/swagger";
 import { CreateZoneDto } from "./create-zone.dto";
-import { IsArray, IsNumber, IsString } from "class-validator";
+import {
+  IsArray,
+  IsEnum,
+  IsNumber,
+  IsObject,
+  IsString,
+  ValidateNested,
+} from "class-validator";
+import { Type } from "class-transformer";
+
+enum PAYMENTTYPE {
+  ONLINE = "ONLINE",
+  COD = "COD",
+  BOTH = "BOTH",
+}
+
+class minumumnOrderAmount {
+  @ApiProperty()
+  @IsString()
+  minimumuOrderValue: string;
+  @ApiProperty()
+  @IsNumber()
+  areaRangeInKM: number;
+}
+
+class FIX {
+  @ApiProperty()
+  @IsNumber()
+  uptoKm: number;
+  @ApiProperty()
+  @IsNumber()
+  charge: number;
+}
+
+class OTHERCHARGES {
+  @ApiProperty()
+  @IsString()
+  chargeName: string;
+  @ApiProperty()
+  @IsNumber()
+  amount: number;
+}
+
+class PERKM {
+  @ApiProperty()
+  @IsNumber()
+  perkmCharge: number;
+  @ApiProperty()
+  @IsNumber()
+  initialCharge: number;
+  @ApiProperty()
+  @IsNumber()
+  initialKm: number;
+}
+class ShippingCharge {
+  @ApiProperty()
+  @IsString()
+  type: string;
+
+  @ApiProperty({ type: PERKM })
+  @IsObject()
+  perKm: PERKM;
+}
 
 export class AdditionalDTO {
+  @ApiProperty({ enum: PAYMENTTYPE })
+  @IsEnum(PAYMENTTYPE)
+  paymentType: PAYMENTTYPE.BOTH;
+
   @ApiProperty()
   @IsArray()
   zoneCategory: [string];
 
-  @ApiProperty()
+  @ApiProperty({ type: [minumumnOrderAmount] })
   @IsArray()
-  minimumOrderAmount: [
-    {
-      minimumuOrderValue: string;
-      areaRangeInKM: number;
-    },
-  ];
+  @ValidateNested({ each: true })
+  minimumOrderAmount: minumumnOrderAmount[];
 
-  @ApiProperty()
-  @IsString()
-  chargeType: string;
+  @ApiProperty({ type: ShippingCharge })
+  @IsObject()
+  shippingCharge: ShippingCharge;
 
-  @ApiProperty()
-  @IsNumber()
-  deliveryChargePerKM: number;
-
-  @ApiProperty()
-  @IsNumber()
-  initialDeliveryCharge: number;
-
-  @ApiProperty()
-  @IsNumber()
-  initialKmForInitialDeliveryCharge: number;
-
-  @ApiProperty()
+  @ApiProperty({ type: [FIX] })
   @IsArray()
-  otherCharges: [
-    {
-      chargeName: string;
-      amount: number;
-    },
-  ];
+  fix: FIX[];
+
+  @ApiProperty({ type: [OTHERCHARGES] })
+  @IsArray()
+  otherCharges: OTHERCHARGES[];
 }
 export class UpdateZoneDto extends IntersectionType(
   CreateZoneDto,
