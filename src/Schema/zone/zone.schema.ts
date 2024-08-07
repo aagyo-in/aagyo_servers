@@ -12,12 +12,6 @@ export class Zone {
   @Prop()
   isActive: boolean = false;
 
-  @Prop()
-  isOnline: boolean = false;
-
-  @Prop()
-  isCOD: boolean = false;
-
   @Prop({ required: true })
   city: string;
 
@@ -27,11 +21,14 @@ export class Zone {
   @Prop({ required: true })
   country: string;
 
-  @Prop({ required: true })
-  mapPath: [];
+  @Prop()
+  paymentType: string;
 
   @Prop()
   zoneCategory: [string];
+
+  @Prop({ required: true })
+  mapPath: [];
 
   @Prop()
   minimumOrderAmount: [
@@ -41,14 +38,23 @@ export class Zone {
     },
   ];
 
+  @Prop({ type: Object })
+  shippingCharge: {
+    type: string;
+    perKm: {
+      perKmCharge: number;
+      initialCharge: number;
+      initialKm: number;
+    };
+  };
+
   @Prop()
-  chargeType: string;
-  @Prop()
-  deliveryChargePerKM: number;
-  @Prop()
-  initialDeliveryCharge: number;
-  @Prop()
-  initialKmForInitialDeliveryCharge: number;
+  fix: [
+    {
+      uptoKm: number;
+      charge: number;
+    },
+  ];
 
   @Prop()
   otherCharges: [
