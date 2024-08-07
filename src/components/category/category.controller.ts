@@ -30,12 +30,49 @@ import { AuthGuard } from "src/guards/auth.guards";
 import { ObjectId } from "mongodb";
 import { GetProductsCategory } from "./dto/get-productsCategory.dto";
 import { GetStoresCategory } from "./dto/get-categoryOfStore.dto";
+import { UpdateCategoryDTO } from "./dto/update-category.dto";
 
 @ApiBearerAuth()
 @ApiTags("Category")
 @Controller("category")
 export class CategoryController {
   constructor(private readonly categoryService: CategoryService) {}
+
+  @UseGuards(AuthGuard)
+  @ApiOperation({ summary: "Add Brand Category" })
+  @Post("create-brand")
+  @HttpCode(HttpStatus.CREATED)
+  @UseInterceptors(FileInterceptor("file"))
+  createBrandCategory(
+    @Req() { user }: any,
+    @Body() createCategoryDTO: CreateCategoryDTO,
+    @UploadedFile()
+    file: Express.Multer.File
+  ) {
+    return this.categoryService.createBrandCategory(
+      user,
+      createCategoryDTO,
+      file
+    );
+  }
+
+  @UseGuards(AuthGuard)
+  @ApiOperation({ summary: "Update Brand Category" })
+  @ApiParam({ name: "id", type: String })
+  @Post("update-brand/:id")
+  @HttpCode(HttpStatus.OK)
+  updateBrandCategory(
+    @Req() { user }: any,
+    @Body() updateCategoryDTO: UpdateCategoryDTO,
+    @Param("id") id: string
+  ) {
+    return this.categoryService.updateBrandCategory(
+      user,
+      updateCategoryDTO,
+      id
+    );
+  }
+
   @UseGuards(AuthGuard)
   @ApiOperation({ summary: "Add Category" })
   @Post("create")

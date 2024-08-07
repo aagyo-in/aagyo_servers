@@ -17,6 +17,10 @@ export class Category {
 
   @Prop({ type: Boolean, default: false })
   createdByAdmin: boolean;
+  @Prop()
+  sort: boolean;
+  @Prop()
+  instructions: [string];
 }
 
 export type CategoryDocument = Category & Document;

@@ -11,6 +11,7 @@ import { ObjectId } from "mongodb";
 import { CustomHttpException } from "src/exception/custom-http.exception";
 import { GetProductsCategory } from "./dto/get-productsCategory.dto";
 import { GetStoresCategory } from "./dto/get-categoryOfStore.dto";
+import { UpdateCategoryDTO } from "./dto/update-category.dto";
 
 @Injectable()
 export class CategoryService extends CrudService {
@@ -20,6 +21,61 @@ export class CategoryService extends CrudService {
     private readonly s3Service: S3Service
   ) {
     super(categoryModel);
+  }
+
+  async createBrandCategory(
+    user: any,
+    createCategoryDTO: CreateCategoryDTO,
+    file: Express.Multer.File
+  ): Promise<any> {
+    try {
+      const { categoryName } = createCategoryDTO;
+      const uploadedFile = await this.s3Service.uploadFile(file);
+
+      const createData = {
+        name: categoryName,
+        banner: uploadedFile,
+        createdByAdmin: true,
+      };
+      const data = Object.assign(createData, { createdBy: user.sub });
+      await this.categoryModel.create(data);
+      return {
+        message: "Category Created Sucessfully!",
+        status: "SUCCESS",
+      };
+    } catch (err) {
+      console.log(err);
+      throw err;
+    }
+  }
+
+  async updateBrandCategory(
+    user: any,
+    updateCategoryDTO: UpdateCategoryDTO,
+    id: string
+  ): Promise<any> {
+    try {
+      const createData = {
+        name: updateCategoryDTO.categoryName,
+      };
+      const result = await this.categoryModel.findByIdAndUpdate(
+        {
+          _id: new ObjectId(id),
+        },
+        {
+          $set: {
+            ...updateCategoryDTO,
+          },
+        }
+      );
+      return {
+        message: "Category Updated Sucessfully!",
+        status: "SUCCESS",
+      };
+    } catch (err) {
+      console.log(err);
+      throw err;
+    }
   }
   async createCategory(
     user: any,
