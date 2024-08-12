@@ -12,6 +12,7 @@ class Slot {
   @Prop({ required: false })
   openDays: string[];
 }
+
 @Schema({ timestamps: true })
 export class Store {
   @Prop({
@@ -25,8 +26,23 @@ export class Store {
   @Prop({ required: false })
   storeName: string;
 
+  @Prop({ required: false })
+  contactNumber: string;
+
   @Prop({ required: true })
   category: mongoose.Types.ObjectId[];
+
+  @Prop({ type: Object, required: false })
+  storeImage: Object;
+
+  @Prop({ type: Object, required: false })
+  address: Object;
+
+  @Prop({ required: false })
+  latitude: string;
+
+  @Prop({ required: false })
+  longitude: string;
 
   @Prop({ required: false })
   country: string;
@@ -38,34 +54,22 @@ export class Store {
   city: string;
 
   @Prop({ required: false })
-  address: string;
+  zipCode: string;
 
-  @Prop({ required: false })
-  pinCode: string;
-
-  @Prop({ required: false })
-  latitude: string;
-
-  @Prop({ required: false })
-  longitude: string;
-
-  @Prop({ type: Object, required: false })
-  banner: Object;
+  @Prop({ required: false, type: Object })
+  operatingZone: Object;
 
   @Prop({ required: false })
   isFullTimeOpen: boolean;
 
-  @Prop({ type: Slot })
-  slots: Slot[];
+  @Prop({ required: false, type: Array })
+  openDaysAndTime: [];
+
+  @Prop({ required: false, type: Array })
+  aditionalClosing: [];
 
   @Prop({ required: false })
-  contact: string;
-
-  @Prop({ type: Object })
-  openStatus: {
-    openStatus: boolean;
-    autoOpenTime: Date;
-  };
+  storeOffMessage: string;
 }
 
 export type StoreDocument = Store & Document;

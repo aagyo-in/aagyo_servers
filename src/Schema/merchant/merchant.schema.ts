@@ -3,20 +3,17 @@ import mongoose, { Date, Document } from "mongoose";
 
 @Schema({ timestamps: true })
 export class Merchant {
-  @Prop({ type: String })
+  @Prop()
   name: string;
 
-  @Prop({ type: String, lowercase: true })
+  @Prop()
+  phoneNumber: string;
+
+  @Prop()
   email: string;
 
-  @Prop({ type: String })
-  contact: string;
-
-  @Prop({ type: String })
-  password: string;
-
-  @Prop({ type: Number })
-  rating: number = 4;
+  @Prop()
+  gender: string;
 }
 
 export type MerchantDocument = Merchant & Document;

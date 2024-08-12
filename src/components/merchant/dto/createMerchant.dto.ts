@@ -1,187 +1,246 @@
 import {
   IsEmail,
-  IsNotEmpty,
-  IsPhoneNumber,
   IsString,
-  Max,
-  Min,
   IsObject,
-  IsStrongPassword,
-  ValidateNested,
-  IsOptional,
   IsBoolean,
   IsArray,
   IsNumber,
-  IsDefined,
-  ArrayMinSize,
+  IsOptional,
 } from "class-validator";
 import { Type as ValidationTypes } from "class-transformer";
 import { ApiProperty } from "@nestjs/swagger";
 
-class storeDetails {
+class OWNERDETAIL {
   @ApiProperty()
   @IsString()
-  @IsNotEmpty({ message: "Name could not be empty" })
-  readonly fullName: string;
+  fullName: string;
 
   @ApiProperty()
   @IsString()
-  @IsPhoneNumber()
-  readonly phoneNumber: string;
+  phoneNumber: string;
 
   @ApiProperty()
   @IsEmail()
-  readonly email: string;
-
-  @ApiProperty()
-  @IsStrongPassword()
-  @Min(8)
-  @Max(16)
-  readonly password: string;
+  email: string;
 
   @ApiProperty()
   @IsString()
-  readonly storeName: string;
+  gender: string;
+}
+
+class STOREDETAILS {
+  @ApiProperty()
+  @IsString()
+  storeName: string;
 
   @ApiProperty()
   @IsString()
-  @IsEmail()
-  readonly contactEmail: string;
+  contactNumber: string;
 
   @ApiProperty()
-  @IsString()
-  @IsPhoneNumber()
-  readonly contactNumber: string;
-
-  @ApiProperty()
-  @IsString()
-  readonly contactPerson: string;
-
-  @ApiProperty()
-  @IsString()
-  readonly address: string;
-
-  @ApiProperty()
-  @IsString()
-  readonly loyality: string;
-
-  @ApiProperty()
-  @IsString()
-  readonly country: string;
-
-  @ApiProperty()
-  @IsString()
-  readonly state: string;
-
-  @ApiProperty()
-  @IsString()
-  readonly city: string;
-
-  @ApiProperty()
-  @IsString()
-  readonly timeZone: string;
-
-  @ApiProperty()
-  @IsString()
-  readonly zipCode: string;
-
-  @ApiProperty()
-  @IsString()
-  readonly operatingZone: string;
-
-  @ApiProperty()
-  @IsNumber()
-  readonly prepareTime: number;
-
-  @ApiProperty()
-  @IsString()
-  readonly operationType: string;
-
-  @ApiProperty()
-  @IsString()
-  readonly aboutUs: string;
+  @IsArray()
+  category: [string];
 
   @ApiProperty()
   @IsObject()
-  readonly banner: Object;
+  storeImage: {};
+
+  @ApiProperty()
+  @IsString()
+  address: string;
+
+  @ApiProperty()
+  @IsString()
+  latitude: string;
+
+  @ApiProperty()
+  @IsString()
+  longitude: string;
+
+  @ApiProperty()
+  @IsString()
+  country: string;
+
+  @ApiProperty()
+  @IsString()
+  state: string;
+
+  @ApiProperty()
+  @IsString()
+  city: string;
+
+  @ApiProperty()
+  @IsString()
+  zipCode: string;
+
+  @ApiProperty()
+  @IsString()
+  operatingZone: string;
+
+  @ApiProperty()
+  @IsNumber()
+  prepareTime: 30;
 }
 
-class storeTime {
+class OPENDAYSANDTIME {
   @ApiProperty()
-  @IsOptional()
+  @IsString()
+  day: string;
+  @ApiProperty()
+  @IsString()
+  openTime: string;
+  @ApiProperty()
+  @IsString()
+  closeTime: string;
+}
+class STORETIME {
+  @ApiProperty()
   @IsBoolean()
-  readonly isFullTimeOpen: boolean;
+  isFullTimeOpen: boolean;
+
+  @ApiProperty({ type: OPENDAYSANDTIME })
+  openDaysAndTime: [OPENDAYSANDTIME];
 
   @ApiProperty()
+  aditionalClosing: [];
+
+  @ApiProperty()
+  @IsString()
+  storeOffMessage: string;
+}
+
+class BANKDETAIL {
+  @ApiProperty()
   @IsOptional()
+  @IsString()
+  id: string;
+  @ApiProperty()
+  @IsString()
+  accountNumber: string;
+  @ApiProperty()
+  @IsString()
+  accountType: string;
+  @ApiProperty()
+  @IsString()
+  accountHolderName: string;
+  @ApiProperty()
+  @IsString()
+  ifsc: string;
+  @ApiProperty()
+  @IsString()
+  name: string;
+  @ApiProperty()
+  @IsString()
+  email: string;
+  @ApiProperty()
+  @IsString()
+  mobile: string;
+}
+
+class AADHAR {
+  @ApiProperty()
+  @IsString()
+  name: string;
+
+  @ApiProperty()
+  @IsString()
+  number: string;
+
+  @ApiProperty()
+  @IsString()
+  aadharFrontImg: string;
+
+  @ApiProperty()
+  @IsString()
+  aadharBackImg: string;
+}
+
+class PAN {
+  @ApiProperty()
+  @IsString()
+  name: string;
+
+  @ApiProperty()
+  @IsString()
+  number: string;
+
+  @ApiProperty()
+  @IsString()
+  panImg: string;
+}
+class GST {
+  @ApiProperty()
+  @IsString()
+  name: string;
+
+  @ApiProperty()
+  @IsString()
+  number: string;
+
+  @ApiProperty()
+  @IsString()
+  img: string;
+}
+class STORE {
+  @ApiProperty()
+  @IsString()
+  name: string;
+
+  @ApiProperty()
+  @IsString()
+  img: string;
+}
+class OTHER {
+  @ApiProperty()
+  @IsString()
+  name: string;
+
+  @ApiProperty()
+  @IsString()
+  number: string;
+
+  @ApiProperty()
+  @IsString()
+  img: string;
+}
+class DOCUMENTDETAIL {
+  @ApiProperty({ type: AADHAR })
   @IsObject()
-  readonly time: Object;
+  aadhar: AADHAR;
 
-  @ApiProperty()
-  @IsOptional()
-  @IsArray()
-  readonly openDays: [];
+  @ApiProperty({ type: PAN })
+  @IsObject()
+  pan: PAN;
 
-  @ApiProperty()
-  @IsOptional()
-  @IsString()
-  readonly storeOffMessage: string;
-}
-
-class commission {
-  @ApiProperty()
-  @IsString()
-  readonly payoutType: string;
-
-  @ApiProperty()
-  @IsNumber()
-  readonly value: 0;
-}
-
-class storeTags {
-  @ApiProperty()
-  @IsArray()
-  @ArrayMinSize(1, { message: "Array must have at least one element" })
-  readonly tags: [];
-}
-
-export class storeCategory {
-  @ApiProperty()
-  @IsArray()
-  @ArrayMinSize(1, { message: "Array must have at least one element" })
-  readonly category: [];
+  @ApiProperty({ type: GST })
+  @IsObject()
+  gst: GST;
+  @ApiProperty({ type: STORE })
+  @IsObject()
+  store: STORE;
+  @ApiProperty({ type: OTHER })
+  @IsObject()
+  other: OTHER;
 }
 
 export class CreateMerchantDTO {
-  // @ApiProperty()
-  // @ValidateNested()
-  // @IsDefined()
-  // // @ValidationTypes(() => storeDetails)
-  // storeDetails?: storeDetails;
+  @ApiProperty({ type: OWNERDETAIL })
+  @IsObject()
+  ownerDetails: OWNERDETAIL;
 
-  // @ApiProperty()
-  // @IsObject()
-  // @IsDefined()
-  // @ValidateNested()
-  // @ValidationTypes(() => storeTime)
-  // storeTime?: storeTime;
+  @ApiProperty({ type: STOREDETAILS })
+  @IsObject()
+  storeDetails: STOREDETAILS;
 
-  // @ApiProperty()
-  // @IsObject()
-  // @IsDefined()
-  // @ValidateNested()
-  // @ValidationTypes(() => commission)
-  // commission: commission;
+  @ApiProperty({ type: STORETIME })
+  @IsObject()
+  storeTime: STORETIME;
 
-  // @ApiProperty()
-  // @IsObject()
-  // @ValidateNested()
-  // @ValidationTypes(() => storeTags)
-  // storeTags: storeTags;
+  @ApiProperty({ type: BANKDETAIL })
+  @IsObject()
+  bankDetails: BANKDETAIL;
 
-  // @ApiProperty()
-  // @IsObject()
-  // @ValidateNested()
-  // @ValidationTypes(() => storeCategory)
-  // storeCategory: storeCategory;
+  @ApiProperty({ type: DOCUMENTDETAIL })
+  @IsObject()
+  documentDetail: DOCUMENTDETAIL;
 }

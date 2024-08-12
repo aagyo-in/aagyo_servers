@@ -15,6 +15,11 @@ import { GetStoresDTO } from "./dto/stores/get-Stores.dto";
 import { GetStoreByCategory } from "./dto/stores/get-StoreByCategory.dto";
 import { PRODUCTMODEL, ProductDocument } from "src/Schema/product";
 import { match } from "assert";
+import {
+  DOCUMENTDETAIL_MODEL,
+  DocumentDetailDocument,
+} from "src/Schema/documents";
+import { BANKDETAIL_MODEL, BankDetailDocument } from "src/Schema/bankDetail";
 
 @Injectable()
 export class MerchantService extends CrudService {
@@ -24,7 +29,11 @@ export class MerchantService extends CrudService {
     @InjectModel(STORE_MODEL)
     private readonly storeModel: Model<StoreDocument>,
     @InjectModel(PRODUCTMODEL)
-    private readonly productModel: Model<ProductDocument>
+    private readonly productModel: Model<ProductDocument>,
+    @InjectModel(DOCUMENTDETAIL_MODEL)
+    private readonly documentModel: Model<DocumentDetailDocument>,
+    @InjectModel(BANKDETAIL_MODEL)
+    private readonly bankModel: Model<BankDetailDocument>
   ) {
     super(merchantModel);
   }
@@ -117,9 +126,32 @@ export class MerchantService extends CrudService {
   async createMerchant(
     createMerchantDTO: CreateMerchantDTO
   ): Promise<{ message: string }> {
+    const {
+      bankDetails,
+      documentDetail,
+      ownerDetails,
+      storeDetails,
+      storeTime,
+    } = createMerchantDTO;
     try {
-      const result = await this.merchantModel.create(createMerchantDTO);
-      console.log(result);
+      const { _id }: any = await this.merchantModel.create({
+        ...ownerDetails,
+        name: ownerDetails?.fullName,
+      });
+
+      await this.storeModel.create({
+        ...storeDetails,
+        ...storeTime,
+        merchant_id: new ObjectId(_id),
+      });
+      await this.documentModel.create({
+        merchant_id: new ObjectId(_id),
+        documents: [{ ...documentDetail }],
+      });
+      await this.bankModel.create({
+        merchant_id: new ObjectId(_id),
+        ...bankDetails,
+      });
       return {
         message: "Merchent Create Sucessfully!",
       };

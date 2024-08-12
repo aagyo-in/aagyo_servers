@@ -70,7 +70,6 @@ export class AttributeService extends CrudService {
     value: any
   ): Promise<{ message: string }> {
     try {
-      console.log(value);
       const result = await this.attributeModel.findByIdAndUpdate(
         { _id: id },
         { $set: { name: value.name } }
