@@ -112,7 +112,7 @@ export class MerchantService extends CrudService {
         };
       }
 
-      if (!store?.slots?.length && !store?.isFullTimeOpen) {
+      if (!store?.isFullTimeOpen) {
         return {
           id,
           STEP: 3,
@@ -430,13 +430,13 @@ export class MerchantService extends CrudService {
         };
       }
 
-      if (!store?.slots?.length && !store?.isFullTimeOpen) {
-        return {
-          STEP: 3,
-          statusCode: 2,
-          status: "PENDING",
-        };
-      }
+      // if (!store?.slots?.length && !store?.isFullTimeOpen) {
+      //   return {
+      //     STEP: 3,
+      //     statusCode: 2,
+      //     status: "PENDING",
+      //   };
+      // }
 
       const bankDetail = await this.bankDetailModel.findOne({
         merchant_id: id,
@@ -460,7 +460,7 @@ export class MerchantService extends CrudService {
       return {
         STEP: 6,
         statusCode: 1,
-        storeStatus: store?.openStatus,
+        storeStatus: " store?.openStatus",
         status: "SUCCESS",
       };
     } catch (error) {

@@ -18,7 +18,6 @@ import { CreateMerchantDTO } from "./dto/createMerchant.dto";
 import { MerchantSortFilterDTO } from "./dto/merchantSortFilterDTO";
 import {
   ApiBearerAuth,
-  ApiBody,
   ApiOperation,
   ApiParam,
   ApiQuery,
@@ -55,15 +54,8 @@ export class MerchantController {
   @Public()
   @Post("/create")
   @ApiOperation({ summary: "Register Merchant" })
-  @ApiBody({
-    schema: {},
-  })
   @HttpCode(HttpStatus.CREATED)
-  @UseInterceptors(FileInterceptor("file"))
-  createMerchant(
-    @Body() createMerchantDTO: CreateMerchantDTO,
-    @UploadedFile() file: Express.Multer.File
-  ) {
+  createMerchant(@Body() createMerchantDTO: CreateMerchantDTO) {
     return this.merchantService.createMerchant(createMerchantDTO);
   }
 

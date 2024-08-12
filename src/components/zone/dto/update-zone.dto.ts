@@ -62,6 +62,10 @@ class ShippingCharge {
   @ApiProperty({ type: PERKM })
   @IsObject()
   perKm: PERKM;
+
+  @ApiProperty({ type: [FIX] })
+  @IsArray()
+  fix: FIX[];
 }
 
 export class AdditionalDTO {
@@ -81,10 +85,6 @@ export class AdditionalDTO {
   @ApiProperty({ type: ShippingCharge })
   @IsObject()
   shippingCharge: ShippingCharge;
-
-  @ApiProperty({ type: [FIX] })
-  @IsArray()
-  fix: FIX[];
 
   @ApiProperty({ type: [OTHERCHARGES] })
   @IsArray()

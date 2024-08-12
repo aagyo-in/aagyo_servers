@@ -46,15 +46,13 @@ export class Zone {
       initialCharge: number;
       initialKm: number;
     };
+    fix: [
+      {
+        uptoKm: number;
+        charge: number;
+      },
+    ];
   };
-
-  @Prop()
-  fix: [
-    {
-      uptoKm: number;
-      charge: number;
-    },
-  ];
 
   @Prop()
   otherCharges: [
