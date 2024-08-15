@@ -220,7 +220,7 @@ class DOCUMENTDETAIL {
   store: STORE;
   @ApiProperty({ type: OTHER })
   @IsObject()
-  other: OTHER;
+  other: OTHER[];
 }
 
 export class CreateMerchantDTO {
