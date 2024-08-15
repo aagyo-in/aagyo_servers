@@ -81,6 +81,21 @@ export class ZoneService {
     }
   }
 
+  async getZoneById(id: string) {
+    try {
+      const zone = await this.zoneModel.findOne({
+        _id: new ObjectId(id),
+      });
+
+      return {
+        message: "Zone Get Successfully",
+        status: true,
+        data: zone,
+      };
+    } catch (error) {
+      throw new CustomHttpException(error.message);
+    }
+  }
   async deleteZone(id: string) {
     try {
       await this.zoneModel.findOneAndDelete({

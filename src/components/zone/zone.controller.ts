@@ -44,16 +44,23 @@ export class ZoneController {
     return this.zoneService.allZones(getZoneDTO);
   }
 
+  @ApiOperation({ summary: "Get  Zone by id" })
+  @HttpCode(HttpStatus.OK)
+  @Delete("/get/:id")
+  getZoneById(@Param("id") id: string) {
+    return this.zoneService.getZoneById(id);
+  }
+
   @ApiOperation({ summary: "Delete  Zone" })
   @HttpCode(HttpStatus.OK)
-  @Delete("/delete:/id")
+  @Delete("/delete/:id")
   deleteZone(@Param("id") id: string) {
     return this.zoneService.deleteZone(id);
   }
 
   @ApiOperation({ summary: "Update Zone" })
   @HttpCode(HttpStatus.OK)
-  @Patch("/update:/id")
+  @Patch("/update/:id")
   updateZone(@Param("id") id: string, @Body() updateZoneDto: UpdateZoneDto) {
     return this.zoneService.updateZone(id, updateZoneDto);
   }
