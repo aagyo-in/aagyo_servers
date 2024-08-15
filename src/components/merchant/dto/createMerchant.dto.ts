@@ -6,8 +6,9 @@ import {
   IsArray,
   IsNumber,
   IsOptional,
+  ValidateNested,
 } from "class-validator";
-import { Type as ValidationTypes } from "class-transformer";
+import { Type, Type as ValidationTypes } from "class-transformer";
 import { ApiProperty } from "@nestjs/swagger";
 
 class OWNERDETAIL {
@@ -93,16 +94,33 @@ class OPENDAYSANDTIME {
   @IsString()
   closeTime: string;
 }
+class AditionalClosingType {
+  @ApiProperty()
+  @IsString()
+  nth: string;
+  @ApiProperty()
+  @IsString()
+  day: string;
+  @ApiProperty()
+  @IsString()
+  date: string;
+}
 class STORETIME {
   @ApiProperty()
   @IsBoolean()
   isFullTimeOpen: boolean;
 
-  @ApiProperty({ type: OPENDAYSANDTIME })
-  openDaysAndTime: [OPENDAYSANDTIME];
+  @ApiProperty({ type: [OPENDAYSANDTIME] })
+  @IsArray()
+  @ValidateNested({ each: true })
+  @Type(() => OPENDAYSANDTIME)
+  openDaysAndTime: OPENDAYSANDTIME[];
 
-  @ApiProperty()
-  aditionalClosing: [];
+  @ApiProperty({ type: [AditionalClosingType] })
+  @IsArray()
+  @ValidateNested({ each: true })
+  @Type(() => AditionalClosingType)
+  aditionalClosing: AditionalClosingType[];
 
   @ApiProperty()
   @IsString()
