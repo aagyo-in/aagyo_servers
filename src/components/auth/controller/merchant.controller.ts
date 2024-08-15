@@ -7,8 +7,10 @@ import {
   Param,
   ParseFilePipe,
   Post,
+  Req,
   UploadedFile,
   UploadedFiles,
+  UseGuards,
   UseInterceptors,
 } from "@nestjs/common";
 import { MerchantLoginDTO } from "../dto/merchantLogin.dto";
@@ -27,6 +29,7 @@ import { RegisterBankDetailDTO } from "../dto/registerDTO/register-bankDetails.d
 import { RegisterDocumentDTO } from "../dto/registerDTO/register-document.dto";
 import { RegisterTime } from "../dto/registerDTO/register-registerTime.dto";
 import { FileInterceptor, FilesInterceptor } from "@nestjs/platform-express";
+import { AuthGuard } from "src/guards/auth.guards";
 
 // @UseGuards(AuthGuard)
 @ApiTags("Authantication Merchant")
@@ -48,19 +51,24 @@ export class MerchantController {
     return this.merchantService.verifyOTP(verifyOTPDTO);
   }
 
+  @UseGuards(AuthGuard)
   @Post("/register/ownerDetail")
   @ApiOperation({ summary: "Register Owner Detail " })
   @HttpCode(HttpStatus.CREATED)
   registerOwnerDetail(
     @Body() registerOwnerDetailDTO: RegisterOwnerDetailDTO,
-    @UploadedFile() file: Express.Multer.File
+    @UploadedFile() file: Express.Multer.File,
+    @Req() { user: { sub } }: any
   ) {
-    return this.merchantService.registerOwnerDetail(registerOwnerDetailDTO);
+    return this.merchantService.registerOwnerDetail(
+      sub,
+      registerOwnerDetailDTO
+    );
   }
 
+  @UseGuards(AuthGuard)
   @Post("/register/storeDetail")
   @UseInterceptors(FileInterceptor("storeImage"))
-  @ApiConsumes("multipart/form-data")
   @ApiBody({
     description: "Store Detail",
     type: RegisterStoreDetailDTO,
@@ -69,48 +77,45 @@ export class MerchantController {
   @HttpCode(HttpStatus.CREATED)
   registerStoreDetail(
     @Body() registerStoreDetailDTO: RegisterStoreDetailDTO,
-    @UploadedFile()
-    storeImage: Express.Multer.File
+    @Req() { user: { sub } }: any
   ) {
     return this.merchantService.registerStoreDetail(
-      registerStoreDetailDTO,
-      storeImage
+      sub,
+      registerStoreDetailDTO
     );
   }
 
+  @UseGuards(AuthGuard)
   @Post("/register/storeTiming")
   @ApiOperation({ summary: "Register Store Timing Detail " })
   @HttpCode(HttpStatus.CREATED)
-  registerStoreTiming(@Body() registerTime: RegisterTime) {
-    return this.merchantService.registerStoreTiming(registerTime);
+  registerStoreTiming(
+    @Body() registerTime: RegisterTime,
+    @Req() { user: { sub } }: any
+  ) {
+    return this.merchantService.registerStoreTiming(sub, registerTime);
   }
 
+  @UseGuards(AuthGuard)
   @Post("/register/bankDetail")
   @ApiOperation({ summary: "Register Merchant's Account Detail " })
   @HttpCode(HttpStatus.CREATED)
-  registerBankDetail(@Body() registerBankDetailDTO: RegisterBankDetailDTO) {
-    return this.merchantService.registerBankDetail(registerBankDetailDTO);
+  registerBankDetail(
+    @Body() registerBankDetailDTO: RegisterBankDetailDTO,
+    @Req() { user: { sub } }: any
+  ) {
+    return this.merchantService.registerBankDetail(sub, registerBankDetailDTO);
   }
-
+  @UseGuards(AuthGuard)
   @Post("/register/documents")
   @UseInterceptors(FilesInterceptor("files"))
   @ApiOperation({ summary: "Register Merchant's Documents" })
   @HttpCode(HttpStatus.CREATED)
   registerDocuments(
     @Body() registerDocumentDTO: RegisterDocumentDTO,
-    @UploadedFiles(
-      new ParseFilePipe({
-        // validators: [
-        //   new MaxFileSizeValidator({ maxSize: 100000000 }),
-        //   new FileTypeValidator({
-        //     fileType: /(image\/jpeg|image\/png|application\/pdf)/,
-        //   }),
-        // ],
-      })
-    )
-    files: Array<Express.Multer.File>
+    @Req() { user: { sub } }: any
   ) {
-    return this.merchantService.registerDocuments(registerDocumentDTO, files);
+    return this.merchantService.registerDocuments(sub,registerDocumentDTO);
   }
 
   @HttpCode(HttpStatus.OK)

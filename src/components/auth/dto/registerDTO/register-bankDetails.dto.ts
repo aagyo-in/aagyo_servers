@@ -3,6 +3,7 @@ import {
   IsEmail,
   IsNotEmpty,
   IsObject,
+  IsOptional,
   IsPhoneNumber,
   IsString,
   IsStrongPassword,
@@ -11,41 +12,28 @@ import { ObjectId } from "mongoose";
 
 export class RegisterBankDetailDTO {
   @ApiProperty()
-  @IsNotEmpty()
+  @IsOptional()
+  @IsString()
   id: string;
-
   @ApiProperty()
-  @IsNotEmpty()
   @IsString()
   accountNumber: string;
-
   @ApiProperty()
-  @IsNotEmpty()
   @IsString()
   accountType: string;
-
   @ApiProperty()
-  @IsNotEmpty()
   @IsString()
   accountHolderName: string;
-
   @ApiProperty()
-  @IsNotEmpty()
-  @IsString()
-  name: string;
-
-  @ApiProperty()
-  @IsNotEmpty()
   @IsString()
   ifsc: string;
-
   @ApiProperty()
-  @IsNotEmpty()
-  @IsEmail()
+  @IsString()
+  name: string;
+  @ApiProperty()
+  @IsString()
   email: string;
-
   @ApiProperty()
-  @IsNotEmpty()
-  @IsPhoneNumber()
+  @IsString()
   mobile: string;
 }

@@ -12,36 +12,29 @@ import {
 } from "class-validator";
 import { ObjectId } from "mongodb";
 
-class Slot {
+class OPENDAYSANDTIME {
   @ApiProperty()
-  @IsOptional()
+  @IsString()
+  day: string;
+  @ApiProperty()
   @IsString()
   openTime: string;
-
   @ApiProperty()
-  @IsOptional()
   @IsString()
   closeTime: string;
-
-  @ApiProperty()
-  @IsOptional()
-  @IsArray()
-  openDays: any[];
 }
-
 export class RegisterTime {
   @ApiProperty()
-  @IsNotEmpty()
-  id: string;
+  @IsBoolean()
+  isFullTimeOpen: boolean;
+
+  @ApiProperty({ type: OPENDAYSANDTIME })
+  openDaysAndTime: [OPENDAYSANDTIME];
 
   @ApiProperty()
-  @IsOptional()
-  @IsBoolean()
-  isFullTimeOpen: boolean = false;
+  aditionalClosing: [];
 
-  @ApiProperty({ type: [Slot] })
-  @IsOptional()
-  @IsArray()
-  @ValidateNested({ each: true })
-  slots: Slot[];
+  @ApiProperty()
+  @IsString()
+  storeOffMessage: string;
 }

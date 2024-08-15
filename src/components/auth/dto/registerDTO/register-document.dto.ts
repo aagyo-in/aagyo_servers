@@ -10,7 +10,8 @@ import {
   IsStrongPassword,
   ValidateNested,
 } from "class-validator";
-class Document {
+
+class AADHAR {
   @ApiProperty()
   @IsString()
   name: string;
@@ -18,16 +19,80 @@ class Document {
   @ApiProperty()
   @IsString()
   number: string;
-}
-export class RegisterDocumentDTO {
-  @ApiProperty({ type: () => [Document] }) // Specify the type of the array elements
-  @IsArray()
-  @ValidateNested({ each: true }) // Ensure each element of the array is validated
-  @Type(() => Document) // Ensure proper transformation of nested objects
-  documents: Document[];
 
   @ApiProperty()
-  @IsNotEmpty()
   @IsString()
-  id: string;
+  aadharFrontImg: string;
+
+  @ApiProperty()
+  @IsString()
+  aadharBackImg: string;
+}
+
+class PAN {
+  @ApiProperty()
+  @IsString()
+  name: string;
+
+  @ApiProperty()
+  @IsString()
+  number: string;
+
+  @ApiProperty()
+  @IsString()
+  panImg: string;
+}
+class GST {
+  @ApiProperty()
+  @IsString()
+  name: string;
+
+  @ApiProperty()
+  @IsString()
+  number: string;
+
+  @ApiProperty()
+  @IsString()
+  img: string;
+}
+class STORE {
+  @ApiProperty()
+  @IsString()
+  name: string;
+
+  @ApiProperty()
+  @IsString()
+  img: string;
+}
+class OTHER {
+  @ApiProperty()
+  @IsString()
+  name: string;
+
+  @ApiProperty()
+  @IsString()
+  number: string;
+
+  @ApiProperty()
+  @IsString()
+  img: string;
+}
+export class RegisterDocumentDTO {
+  @ApiProperty({ type: AADHAR })
+  @IsObject()
+  aadhar: AADHAR;
+
+  @ApiProperty({ type: PAN })
+  @IsObject()
+  pan: PAN;
+
+  @ApiProperty({ type: GST })
+  @IsObject()
+  gst: GST;
+  @ApiProperty({ type: STORE })
+  @IsObject()
+  store: STORE;
+  @ApiProperty({ type: OTHER })
+  @IsObject()
+  other: OTHER[];
 }

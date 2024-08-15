@@ -166,15 +166,19 @@ export class MerchantService extends CrudService {
     }
   }
 
-  async registerOwnerDetail(registerOwnerDetailDTO: RegisterOwnerDetailDTO) {
+  async registerOwnerDetail(
+    sub: string,
+    registerOwnerDetailDTO: RegisterOwnerDetailDTO
+  ) {
     try {
-      const { name, id, email } = registerOwnerDetailDTO;
+      const { fullName, email, gender } = registerOwnerDetailDTO;
       const result = await this.merchantModel.findByIdAndUpdate(
-        { _id: new ObjectId(id) },
+        { _id: new ObjectId(sub) },
         {
           $set: {
-            name,
+            name: fullName,
             email,
+            gender,
           },
         },
         {
@@ -191,39 +195,16 @@ export class MerchantService extends CrudService {
   }
 
   async registerStoreDetail(
-    registerStoreDetailDTO: RegisterStoreDetailDTO,
-    banner: Express.Multer.File
+    id: any,
+    registerStoreDetailDTO: RegisterStoreDetailDTO
   ) {
     try {
-      const {
-        id,
-        address,
-        category,
-        city,
-        country,
-        storeName,
-        state,
-        latitude,
-        longitude,
-        pinCode,
-      } = registerStoreDetailDTO;
-      const uploadFile = await this.s3Service.uploadFile(banner);
       const isExist = await this.storeModel.findOne({
         merchant_id: new ObjectId(id),
       });
       if (!isExist) {
         await this.storeModel.create({
-          merchant_id: new ObjectId(id),
-          storeName,
-          category: category && category?.map((item) => new ObjectId(item)),
-          country,
-          state,
-          city,
-          pinCode,
-          latitude,
-          longitude,
-          banner: uploadFile,
-          address,
+          ...registerStoreDetailDTO,
         });
 
         return {
@@ -238,17 +219,7 @@ export class MerchantService extends CrudService {
           },
           {
             $set: {
-              merchant_id: new ObjectId(id),
-              storeName,
-              category: category && category?.map((item) => new ObjectId(item)),
-              country,
-              state,
-              city,
-              pinCode,
-              latitude,
-              longitude,
-              banner: uploadFile,
-              address,
+              ...registerStoreDetailDTO,
             },
           },
           { upsert: true, new: true }
@@ -274,16 +245,13 @@ export class MerchantService extends CrudService {
     }
   }
 
-  async registerStoreTiming(registerTime: RegisterTime) {
+  async registerStoreTiming(id: any, registerTime: RegisterTime) {
     try {
-      const { id, slots, isFullTimeOpen } = registerTime;
-
       const result = await this.storeModel.findOneAndUpdate(
         { merchant_id: new ObjectId(id) },
         {
           $set: {
-            isFullTimeOpen,
-            slots: [...slots],
+            ...registerTime,
           },
         },
         { upsert: true }
@@ -298,33 +266,18 @@ export class MerchantService extends CrudService {
     }
   }
 
-  async registerBankDetail(egisterBankDetailDTO: RegisterBankDetailDTO) {
+  async registerBankDetail(
+    id: any,
+    registerBankDetailDTO: RegisterBankDetailDTO
+  ) {
     try {
-      const {
-        id,
-        accountHolderName,
-        accountNumber,
-        accountType,
-        email,
-        mobile,
-        ifsc,
-        name,
-      } = egisterBankDetailDTO;
-
       const isExist = await this.bankDetailModel.findOne({
         merchant_id: new ObjectId(id),
       });
 
       if (!isExist) {
         await this.bankDetailModel.create({
-          merchant_id: new ObjectId(id),
-          accountNumber,
-          accountType,
-          accountHolderName,
-          name,
-          email,
-          ifsc,
-          mobile,
+          ...registerBankDetailDTO,
         });
         return {
           status: "SUCCESS",
@@ -335,14 +288,7 @@ export class MerchantService extends CrudService {
           { _id: isExist?._id },
           {
             $set: {
-              merchant_id: new ObjectId(id),
-              accountNumber,
-              accountType,
-              ifsc,
-              accountHolderName,
-              name,
-              email,
-              mobile,
+              ...registerBankDetailDTO,
             },
           },
           {
@@ -360,25 +306,12 @@ export class MerchantService extends CrudService {
   }
 
   async registerDocuments(
-    registerDocumentDTO: RegisterDocumentDTO,
-    files: Array<Express.Multer.File>
+    id: string,
+    registerDocumentDTO: RegisterDocumentDTO
   ) {
     try {
-      const { documents, id } = registerDocumentDTO;
-      const uploadedFiles = await this.s3Service.uploadMultipleFile(files);
-      const documentsData = [];
-
-      for (let data of documents) {
-        let obj = {
-          documentName: data?.name,
-          documentNumber: data?.number,
-          documentImg: uploadedFiles?.filter(({ file }) => file == data.name),
-        };
-        documentsData.push(obj);
-      }
       const result = await this.documentModel.create({
-        merchant_id: new ObjectId(id),
-        documents: [...documentsData],
+        ...this.registerDocuments,
       });
       const { name, email } = await this.merchantModel.findById(
         new ObjectId(id)

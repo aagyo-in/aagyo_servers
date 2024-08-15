@@ -10,13 +10,13 @@ import {
 export class RegisterOwnerDetailDTO {
   @ApiProperty()
   @IsString()
-  id: string;
-
-  @ApiProperty()
-  @IsString()
-  name: string;
+  fullName: string;
 
   @ApiProperty()
   @IsEmail()
   email: string;
+
+  @ApiProperty()
+  @IsString()
+  gender: string;
 }
