@@ -108,14 +108,13 @@ export class MerchantController {
   }
   @UseGuards(AuthGuard)
   @Post("/register/documents")
-  @UseInterceptors(FilesInterceptor("files"))
   @ApiOperation({ summary: "Register Merchant's Documents" })
   @HttpCode(HttpStatus.CREATED)
   registerDocuments(
     @Body() registerDocumentDTO: RegisterDocumentDTO,
     @Req() { user: { sub } }: any
   ) {
-    return this.merchantService.registerDocuments(sub,registerDocumentDTO);
+    return this.merchantService.registerDocuments(sub, registerDocumentDTO);
   }
 
   @HttpCode(HttpStatus.OK)

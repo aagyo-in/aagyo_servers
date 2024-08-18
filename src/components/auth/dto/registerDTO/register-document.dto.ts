@@ -92,7 +92,10 @@ export class RegisterDocumentDTO {
   @ApiProperty({ type: STORE })
   @IsObject()
   store: STORE;
-  @ApiProperty({ type: OTHER })
-  @IsObject()
+
+  @ApiProperty({ type: [OTHER] })
+  @IsArray()
+  @ValidateNested({ each: true })
+  @Type(() => OTHER)
   other: OTHER[];
 }

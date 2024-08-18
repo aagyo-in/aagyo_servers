@@ -215,7 +215,7 @@ export class MerchantService extends CrudService {
         const { _id } = isExist;
         await this.storeModel.findByIdAndUpdate(
           {
-            _id: _id,
+            _id,
           },
           {
             $set: {
