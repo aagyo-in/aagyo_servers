@@ -2,6 +2,7 @@ import { ApiProperty, IntersectionType, PartialType } from "@nestjs/swagger";
 import { CreateZoneDto } from "./create-zone.dto";
 import {
   IsArray,
+  IsBoolean,
   IsEnum,
   IsNumber,
   IsObject,
@@ -38,9 +39,14 @@ class OTHERCHARGES {
   @ApiProperty()
   @IsString()
   chargeName: string;
+
   @ApiProperty()
   @IsNumber()
   amount: number;
+  
+  @ApiProperty()
+  @IsBoolean()
+  isActive: boolean;
 }
 
 class PERKM {
@@ -54,6 +60,7 @@ class PERKM {
   @IsNumber()
   initialKm: number;
 }
+
 class ShippingCharge {
   @ApiProperty()
   @IsString()

@@ -85,7 +85,7 @@ export class MerchantService extends CrudService {
         contact: phoneNumber,
       });
 
-      let id;
+      let id: string;
       if (!merchant) {
         const result = await this.merchantModel.create({
           contact: phoneNumber,
@@ -166,14 +166,11 @@ export class MerchantService extends CrudService {
     }
   }
 
-  async registerOwnerDetail(
-    sub: string,
-    registerOwnerDetailDTO: RegisterOwnerDetailDTO
-  ) {
+  async registerOwnerDetail(registerOwnerDetailDTO: RegisterOwnerDetailDTO) {
     try {
-      const { fullName, email, gender } = registerOwnerDetailDTO;
+      const { fullName, email, gender, merchant_id } = registerOwnerDetailDTO;
       const result = await this.merchantModel.findByIdAndUpdate(
-        { _id: new ObjectId(sub) },
+        { _id: new ObjectId(merchant_id) },
         {
           $set: {
             name: fullName,
@@ -194,13 +191,10 @@ export class MerchantService extends CrudService {
     }
   }
 
-  async registerStoreDetail(
-    id: any,
-    registerStoreDetailDTO: RegisterStoreDetailDTO
-  ) {
+  async registerStoreDetail(registerStoreDetailDTO: RegisterStoreDetailDTO) {
     try {
       const isExist = await this.storeModel.findOne({
-        merchant_id: new ObjectId(id),
+        merchant_id: new ObjectId(registerStoreDetailDTO.merchant_id),
       });
       if (!isExist) {
         await this.storeModel.create({

@@ -259,6 +259,7 @@ export class CategoryService extends CrudService {
       throw new CustomHttpException(error.message);
     }
   }
+  
   async getCategoryOfStore(
     categoryOfProducts: GetProductsCategory,
     userId: ObjectId

@@ -22,6 +22,7 @@ import { USER_MODEL, UserSchema } from "./user";
 import { BANNER_MODEL, BannerSchema } from "./banner";
 import { OFFER_MODEL, OfferSchema } from "./offer";
 import { ZONE_MODEL, ZoneSchema } from "./zone";
+import { MASTER_CATEGORY_MODEL, MasterCategorySchema } from "./masterCategory/masterCategory.schema";
 
 const MODELS = [
   { name: ADMIN_MODEL, schema: AdminSchema },
@@ -38,6 +39,7 @@ const MODELS = [
   { name: DOCUMENTDETAIL_MODEL, schema: DocumentDetailSchema },
   { name: PRODUCTMODEL, schema: ProductSchema },
   { name: CATEGORY_MODEL, schema: CategorySchema },
+  { name: MASTER_CATEGORY_MODEL, schema: MasterCategorySchema },
   { name: ORDERMODEL, schema: OrderSchema },
   { name: ADDRESSMODEL, schema: AddressSchema },
   { name: RATING_MODEL, schema: RatingSchema },

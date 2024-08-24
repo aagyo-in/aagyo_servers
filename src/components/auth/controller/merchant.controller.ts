@@ -50,23 +50,19 @@ export class MerchantController {
   verifyOTP(@Body() verifyOTPDTO: VerifyOTPDTO): Promise<any> {
     return this.merchantService.verifyOTP(verifyOTPDTO);
   }
-
-  @UseGuards(AuthGuard)
+ 
   @Post("/register/ownerDetail")
   @ApiOperation({ summary: "Register Owner Detail " })
   @HttpCode(HttpStatus.CREATED)
   registerOwnerDetail(
     @Body() registerOwnerDetailDTO: RegisterOwnerDetailDTO,
-    @UploadedFile() file: Express.Multer.File,
-    @Req() { user: { sub } }: any
+    @UploadedFile() file: Express.Multer.File, 
   ) {
-    return this.merchantService.registerOwnerDetail(
-      sub,
+    return this.merchantService.registerOwnerDetail( 
       registerOwnerDetailDTO
     );
   }
 
-  @UseGuards(AuthGuard)
   @Post("/register/storeDetail")
   @UseInterceptors(FileInterceptor("storeImage"))
   @ApiBody({
@@ -76,11 +72,9 @@ export class MerchantController {
   @ApiOperation({ summary: "Register Store Detail " })
   @HttpCode(HttpStatus.CREATED)
   registerStoreDetail(
-    @Body() registerStoreDetailDTO: RegisterStoreDetailDTO,
-    @Req() { user: { sub } }: any
+    @Body() registerStoreDetailDTO: RegisterStoreDetailDTO, 
   ) {
-    return this.merchantService.registerStoreDetail(
-      sub,
+    return this.merchantService.registerStoreDetail( 
       registerStoreDetailDTO
     );
   }

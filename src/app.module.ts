@@ -25,7 +25,8 @@ import { RatingModule } from './components/rating/rating.module';
 import { CartModule } from './components/cart/cart.module';
 import { BannersModule } from './components/banners/banners.module';
 import { OfferModule } from './components/offer/offer.module';
-import { ZoneModule } from './components/zone/zone.module';
+import { ZoneModule } from './components/zone/zone.module'; 
+import { MasterCategoryModule } from './components/master-category/master-category.module';
 
 @Module({
   imports: [
@@ -59,6 +60,7 @@ import { ZoneModule } from './components/zone/zone.module';
     BannersModule,
     OfferModule,
     ZoneModule,
+    MasterCategoryModule,
   ],
   controllers: [AppController],
   providers: [AppService],

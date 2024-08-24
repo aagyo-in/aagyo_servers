@@ -12,6 +12,11 @@ import {
 import { ObjectId } from "mongodb";
 
 export class RegisterStoreDetailDTO {
+  @ApiProperty() 
+  @IsString()
+  @IsNotEmpty()
+  merchant_id: string;
+
   @ApiProperty()
   @IsString()
   storeName: string;

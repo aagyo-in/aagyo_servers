@@ -33,7 +33,7 @@ export class Zone {
   @Prop()
   minimumOrderAmount: [
     {
-      minimumuOrderValue: string;
+      minimumuOrderValue: number;
       areaRangeInKM: number;
     },
   ];
@@ -41,11 +41,13 @@ export class Zone {
   @Prop({ type: Object })
   shippingCharge: {
     type: string;
-    perKm: {
-      perKmCharge: number;
-      initialCharge: number;
-      initialKm: number;
-    };
+    perKm: [
+      {
+        perKmCharge: number;
+        initialCharge: number;
+        initialKm: number;
+      },
+    ];
     fix: [
       {
         uptoKm: number;
@@ -59,6 +61,7 @@ export class Zone {
     {
       chargeName: string;
       amount: number;
+      isActive: boolean;
     },
   ];
 }
