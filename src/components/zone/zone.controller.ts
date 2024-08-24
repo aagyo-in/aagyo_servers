@@ -21,7 +21,8 @@ import {
   ApiTags,
 } from "@nestjs/swagger";
 import { AuthGuard } from "src/guards/auth.guards";
-import { GetZoneDTO } from "./dto/get-zone.dto";
+import { GetZoneDTO } from "./dto/get-zone.dto"; 
+import { EditZoneDto } from "./dto/edit-zone.dto";
 
 @ApiBearerAuth()
 @UseGuards(AuthGuard)
@@ -37,16 +38,23 @@ export class ZoneController {
     return this.zoneService.createZone(createZoneDto);
   }
 
+  @ApiOperation({ summary: "Create Zone" })
+  @HttpCode(HttpStatus.OK)
+  @Patch("edit/:id")
+  editZone(@Body() editZoneDto: EditZoneDto, @Param("id") id: string) {
+    return this.zoneService.editZone(editZoneDto, id);
+  }
+
   @ApiOperation({ summary: "Get All  Zone" })
   @HttpCode(HttpStatus.OK)
-  @Post("")
+  @Get("")
   allZones(@Query() getZoneDTO: GetZoneDTO) {
     return this.zoneService.allZones(getZoneDTO);
   }
 
   @ApiOperation({ summary: "Get  Zone by id" })
   @HttpCode(HttpStatus.OK)
-  @Delete("/get/:id")
+  @Get(":id")
   getZoneById(@Param("id") id: string) {
     return this.zoneService.getZoneById(id);
   }

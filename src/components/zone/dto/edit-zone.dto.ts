@@ -5,8 +5,7 @@ import {
   IsNotEmpty,
   IsNumber, 
   IsString,
-} from "class-validator";
-import { isTypedArray } from "util/types";
+} from "class-validator"; 
 
 class MapPath {
   @ApiProperty()
@@ -18,7 +17,7 @@ class MapPath {
   private readonly lng: number;
 }
 
-export class CreateZoneDto {
+export class EditZoneDto {
   @ApiProperty()
   @IsString()
   @IsNotEmpty()
