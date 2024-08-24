@@ -72,8 +72,15 @@ export class VARIENTS {
     const numberValue = Number(value);
     return isNaN(numberValue) ? value : numberValue;
   })
+  sort?: number;
+  @ApiProperty()
+  @IsOptional()
+  @IsNumber()
+  @Transform(({ value }) => {
+    const numberValue = Number(value);
+    return isNaN(numberValue) ? value : numberValue;
+  })
   totalStock: number;
-
   @ApiProperty()
   @IsOptional()
   @IsNumber()
@@ -82,17 +89,6 @@ export class VARIENTS {
     return isNaN(numberValue) ? value : numberValue;
   })
   purchaseQuantity: number;
-
-  @ApiProperty()
-  @IsOptional()
-  @IsString()
-  short: string;
-
-  @ApiProperty({ type: [FILES] })
-  @IsOptional()
-  @ValidateNested({ each: true })
-  @Type(() => FILES)
-  productImage: FILES[];
 }
 
 export class CreateProductDTO {
@@ -109,7 +105,18 @@ export class CreateProductDTO {
   @ApiProperty()
   @IsNotEmpty()
   @IsString()
+  masterCategory?: string;
+
+  @ApiProperty()
+  @IsNotEmpty()
+  @IsString()
   description: string;
+
+  @ApiProperty({ type: [FILES] })
+  @IsOptional()
+  @ValidateNested({ each: true })
+  @Type(() => FILES)
+  productImage: FILES[];
 
   @ApiProperty({ type: [String], description: "Array of Tags " })
   @IsOptional()
@@ -126,8 +133,8 @@ export class CreateProductDTO {
     const boolValue = Boolean(value);
     return boolValue;
   })
-  isOrganic: boolean;
-
+  isOrganic?: boolean;
+  sort?: number;
   @ApiProperty({ type: [VARIENTS] })
   @IsOptional()
   @ValidateNested({ each: true })

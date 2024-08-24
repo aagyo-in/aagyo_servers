@@ -20,10 +20,7 @@ class Varients {
   totalStock: number;
 
   @Prop()
-  short: string;
-
-  @Prop({ type: Array, required: true })
-  productImage: [];
+  sort: number = 1;
 
   @Prop()
   weigthOrCount: string;
@@ -37,6 +34,9 @@ export class Product {
   @Prop({ required: true })
   productOwner: ObjectId;
 
+  @Prop({ required: true })
+  masterCategory: string = "";
+
   @Prop({ required: true, ref: "Category" })
   categoryId: mongoose.Types.ObjectId[];
 
@@ -45,6 +45,9 @@ export class Product {
 
   @Prop({ required: true })
   description: string;
+
+  @Prop({ type: Array, required: true })
+  productImage: [];
 
   @Prop({ type: [String], required: true })
   tags: string[];
@@ -57,6 +60,9 @@ export class Product {
 
   @Prop({ type: [Varients] })
   varients: Varients[];
+
+  @Prop()
+  sort: number = 1;
 
   @Prop({ type: Boolean, default: true })
   isActive: boolean = true;

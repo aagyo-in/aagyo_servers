@@ -20,12 +20,13 @@ import { ProductModule } from "./components/product/product.module";
 import { MailModule } from "./components/mail/mail.module";
 import { OrdersModule } from "./components/orders/orders.module";
 import { WalletModule } from "./components/wallet/wallet.module";
-import { UserModule } from './components/user/user.module';
-import { RatingModule } from './components/rating/rating.module';
-import { CartModule } from './components/cart/cart.module';
-import { BannersModule } from './components/banners/banners.module';
-import { OfferModule } from './components/offer/offer.module';
-import { ZoneModule } from './components/zone/zone.module';
+import { UserModule } from "./components/user/user.module";
+import { RatingModule } from "./components/rating/rating.module";
+import { CartModule } from "./components/cart/cart.module";
+import { BannersModule } from "./components/banners/banners.module";
+import { OfferModule } from "./components/offer/offer.module";
+import { ZoneModule } from "./components/zone/zone.module";
+import { RunnerModule } from "./components/runner/runner.module";
 
 @Module({
   imports: [
@@ -59,6 +60,7 @@ import { ZoneModule } from './components/zone/zone.module';
     BannersModule,
     OfferModule,
     ZoneModule,
+    RunnerModule,
   ],
   controllers: [AppController],
   providers: [AppService],
