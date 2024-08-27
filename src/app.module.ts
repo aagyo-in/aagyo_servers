@@ -27,7 +27,7 @@ import { BannersModule } from "./components/banners/banners.module";
 import { OfferModule } from "./components/offer/offer.module";
 import { ZoneModule } from "./components/zone/zone.module";
 import { RunnerModule } from "./components/runner/runner.module";
-
+import { verifyRunnerModule } from "./components/verifyrunner/verifyrunner.module";
 @Module({
   imports: [
     ConfigModule.forRoot({
@@ -61,6 +61,7 @@ import { RunnerModule } from "./components/runner/runner.module";
     OfferModule,
     ZoneModule,
     RunnerModule,
+    verifyRunnerModule,
   ],
   controllers: [AppController],
   providers: [AppService],

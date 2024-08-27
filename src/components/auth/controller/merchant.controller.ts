@@ -113,9 +113,15 @@ export class MerchantController {
   @HttpCode(HttpStatus.CREATED)
   registerDocuments(
     @Body() registerDocumentDTO: RegisterDocumentDTO,
-    @Req() { user: { sub } }: any
+    @Req() { user: { sub } }: any,
+    @UploadedFiles() files: Array<Express.Multer.File>
   ) {
-    return this.merchantService.registerDocuments(sub,registerDocumentDTO);
+    console.log("reached in coltroler");
+    return this.merchantService.registerDocuments(
+      sub,
+      registerDocumentDTO,
+      files
+    );
   }
 
   @HttpCode(HttpStatus.OK)

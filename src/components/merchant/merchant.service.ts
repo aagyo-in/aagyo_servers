@@ -20,7 +20,6 @@ import {
   DocumentDetailDocument,
 } from "src/Schema/documents";
 import { BANKDETAIL_MODEL, BankDetailDocument } from "src/Schema/bankDetail";
-
 @Injectable()
 export class MerchantService extends CrudService {
   constructor(

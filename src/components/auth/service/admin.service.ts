@@ -62,6 +62,7 @@ export class AdminService extends CrudService {
   async signUpAccount(adminSignupDTO: AdminSignupDTO): Promise<any> {
     try {
       const { email, name, password } = adminSignupDTO;
+      console.log(email, name, password);
       const saltOrRounds = 10;
       const hashedPassword = await bcrypt.hash(password, saltOrRounds);
       const result = await this.adminModel.create({

@@ -8,6 +8,8 @@ import {
 import { CrudService } from "src/base/crud.service";
 import { InjectModel } from "@nestjs/mongoose";
 import { Model } from "mongoose";
+import mongoose from "mongoose";
+
 import { JwtService } from "@nestjs/jwt";
 import { REGISTERACCOUNT, SENDOTP, SIGNIN, WRONGOTP } from "src/utils/messages";
 import { MERCHANT_MODEL, MerchantDocument } from "src/Schema/merchant";
@@ -307,12 +309,58 @@ export class MerchantService extends CrudService {
 
   async registerDocuments(
     id: string,
-    registerDocumentDTO: RegisterDocumentDTO
+    registerDocumentDTO: RegisterDocumentDTO,
+    files: Array<Express.Multer.File>
   ) {
     try {
+      console.log("register marchent documnet:= ", registerDocumentDTO);
+      if (files && files.length > 0) {
+        for (const file of files) {
+          console.log("fffffffff", file.fieldname);
+          let s3Url = await this.s3Service.uploadFile(file);
+          console.log("s3uuuuurrrrrll", s3Url);
+          switch (file.fieldname) {
+            case "panImg":
+              console.log(1);
+              registerDocumentDTO.pan.panImg = s3Url;
+              break;
+            case "aadharFrontImage":
+              console.log(2);
+              registerDocumentDTO.aadhar.aadharFrontImg = s3Url;
+              break;
+            case "aadharBackImage":
+              console.log(3);
+              registerDocumentDTO.aadhar.aadharBackImg = s3Url;
+              break;
+            case "gst":
+              console.log(4);
+              registerDocumentDTO.gst.img = s3Url;
+              break;
+            case "store":
+              console.log(5);
+              registerDocumentDTO.store.img = s3Url;
+            case "other":
+              // Assuming 'other' is an array, you'll need to handle it correctly
+              if (registerDocumentDTO.other.length > 0) {
+                registerDocumentDTO.other[0].img = s3Url;
+              }
+              break;
+            default:
+              console.warn("Unexpected field name: ", file.fieldname);
+          }
+        }
+      }
       const result = await this.documentModel.create({
-        ...this.registerDocuments,
+        merchant_id: new mongoose.Types.ObjectId(id),
+        documents: [registerDocumentDTO], // Store the DTO in the documents field
       });
+
+      console.log("Database result: ", result);
+      // const result = await this.documentModel.create({
+      //   ...this.registerDocuments,
+      // });
+
+      console.log("dbbbb result= ", result);
       const { name, email } = await this.merchantModel.findById(
         new ObjectId(id)
       );

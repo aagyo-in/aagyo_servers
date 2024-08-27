@@ -23,9 +23,13 @@ export class ProductService extends CrudService {
 
   async addProduct(
     id: ObjectId,
+    file: Express.Multer.File,
     createProductDTO: CreateProductDTO
   ): Promise<any> {
     try {
+      let s3Url = await this.s3Service.uploadFile(file);
+      console.log("s3uuuuurrrrrll", s3Url);
+      const productImage = s3Url;
       const {
         categoryId,
         productName,
@@ -34,6 +38,7 @@ export class ProductService extends CrudService {
         keywords,
         isOrganic,
         varients,
+        masterCategory,
       } = createProductDTO;
       console.log("pppppproduc creteeeeedd", createProductDTO);
       await this.productModel.create({
@@ -46,6 +51,8 @@ export class ProductService extends CrudService {
         isOrganic,
         varients: varients,
         isActive: true,
+        masterCategory,
+        productImage,
       });
       return {
         message: "Add Product Sucessfully!",
@@ -62,6 +69,7 @@ export class ProductService extends CrudService {
   ): Promise<any> {
     try {
       const { limit, page, search } = getProductDTO;
+      console.log("tttttttttttttt", Number(page), limit);
 
       const aggregationPipeline: any = [
         {
@@ -114,7 +122,7 @@ export class ProductService extends CrudService {
                 },
               },
             ],
-            data: [{ $skip: (+page - 1) * +limit }, { $limit: +limit }],
+            data: [{ $skip: (+Number(page) - 1) * +limit }, { $limit: +limit }],
           },
         },
       ];

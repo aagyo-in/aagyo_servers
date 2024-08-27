@@ -9,6 +9,7 @@ import {
   Query,
   Req,
   UseGuards,
+  UploadedFile,
 } from "@nestjs/common";
 import { ProductService } from "./product.service";
 import {
@@ -42,9 +43,11 @@ export class ProductController {
   @HttpCode(HttpStatus.CREATED)
   addProduct(
     @Req() { user: { sub } }: any,
+    @UploadedFile() file: Express.Multer.File,
     @Body() createProductDTO: CreateProductDTO
   ) {
-    return this.productService.addProduct(sub, createProductDTO);
+    console.log("product controller pass");
+    return this.productService.addProduct(sub, file, createProductDTO);
   }
 
   @ApiOperation({ summary: "Get All Products" })
@@ -114,6 +117,7 @@ export class ProductController {
     @Body() updateProductDTO: UpdateProductDTO
   ) {
     try {
+      console.log("uppppppdate id", id, updateProductDTO);
       return this.productService.updateProductById(id, updateProductDTO);
     } catch (error) {
       throw new CustomHttpException(error.message);

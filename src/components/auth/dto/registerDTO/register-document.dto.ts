@@ -4,6 +4,7 @@ import {
   IsArray,
   IsEmail,
   IsNotEmpty,
+  isObject,
   IsObject,
   IsPhoneNumber,
   IsString,
@@ -21,12 +22,12 @@ class AADHAR {
   number: string;
 
   @ApiProperty()
-  @IsString()
-  aadharFrontImg: string;
+  @IsObject()
+  aadharFrontImg?: object;
 
   @ApiProperty()
-  @IsString()
-  aadharBackImg: string;
+  @IsObject()
+  aadharBackImg?: object;
 }
 
 class PAN {
@@ -39,8 +40,8 @@ class PAN {
   number: string;
 
   @ApiProperty()
-  @IsString()
-  panImg: string;
+  @IsObject()
+  panImg: object;
 }
 class GST {
   @ApiProperty()
@@ -52,8 +53,8 @@ class GST {
   number: string;
 
   @ApiProperty()
-  @IsString()
-  img: string;
+  @IsObject()
+  img?: object;
 }
 class STORE {
   @ApiProperty()
@@ -61,8 +62,8 @@ class STORE {
   name: string;
 
   @ApiProperty()
-  @IsString()
-  img: string;
+  @IsObject()
+  img?: object;
 }
 class OTHER {
   @ApiProperty()
@@ -74,8 +75,8 @@ class OTHER {
   number: string;
 
   @ApiProperty()
-  @IsString()
-  img: string;
+  @IsObject()
+  img?: object;
 }
 export class RegisterDocumentDTO {
   @ApiProperty({ type: AADHAR })

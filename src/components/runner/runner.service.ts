@@ -23,9 +23,7 @@ export class RunnerService extends CrudService {
     try {
       if (files && files.length > 0) {
         for (const file of files) {
-          console.log("fffffffff", file.fieldname);
           let s3Url = await this.s3Service.uploadFile(file);
-          console.log("s3uuuuurrrrrll", s3Url);
           switch (file.fieldname) {
             case "runnerImage":
               console.log(1);
